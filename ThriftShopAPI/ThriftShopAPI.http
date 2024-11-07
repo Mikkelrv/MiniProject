@@ -1,0 +1,6 @@
+@ThriftShopAPI_HostAddress = http://localhost:5182
+
+GET {{ThriftShopAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
