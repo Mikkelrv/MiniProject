@@ -1,5 +1,86 @@
 ﻿@page "/listings"
 
+@foreach (var item in items){      
+<DisplayItemComponent _item="@item"/>
+}
+
 @code {
+
+    List<Item> items = new List<Item>
+{
+    new Item
+    {
+        Name = "Wireless Earbuds",
+        Price = 29.99,
+        Description = "High-quality wireless earbuds with noise cancellation.",
+        Category = "Electronics",
+        ImageUrl = "https://example.com/images/earbuds.jpg",
+        Listed = DateTime.Now.AddDays(-2),
+        Status = Status.Active,
+        SellerEmail = "seller1@example.com",
+        SoldTime = null
+    },
+    new Item
+    {
+        Name = "Mountain Bike",
+        Price = 199.99,
+        Description = "A durable mountain bike suitable for all terrains.",
+        Category = "Sports & Outdoors",
+        ImageUrl = "https://example.com/images/bike.jpg",
+        Listed = DateTime.Now.AddDays(-10),
+        Status = Status.Sold,
+        SellerEmail = "seller2@example.com",
+        SoldTime = DateTime.Now.AddDays(-1)
+    },
+    new Item
+    {
+        Name = "Coffee Maker",
+        Price = 49.99,
+        Description = "Brews rich and flavorful coffee in minutes.",
+        Category = "Home Appliances",
+        ImageUrl = "https://example.com/images/coffeemaker.jpg",
+        Listed = DateTime.Now.AddDays(-5),
+        Status = Status.Active,
+        SellerEmail = "seller3@example.com",
+        SoldTime = null
+    },
+    new Item
+    {
+        Name = "Yoga Mat",
+        Price = 19.99,
+        Description = "Non-slip yoga mat with extra cushioning.",
+        Category = "Fitness",
+        ImageUrl = "https://example.com/images/yogamat.jpg",
+        Listed = DateTime.Now.AddDays(-3),
+        Status = Status.Active,
+        SellerEmail = "seller4@example.com",
+        SoldTime = null
+    },
+    new Item
+    {
+        Name = "Smartphone",
+        Price = 499.99,
+        Description = "Latest model smartphone with advanced features.",
+        Category = "Electronics",
+        ImageUrl = "https://example.com/images/smartphone.jpg",
+        Listed = DateTime.Now.AddDays(-7),
+        Status = Status.Active,
+        SellerEmail = "seller5@example.com",
+        SoldTime = null
+    },
+    new Item
+    {
+        Name = "Laptop Stand",
+        Price = 24.99,
+        Description = "Adjustable laptop stand for better ergonomics.",
+        Category = "Office Supplies",
+        ImageUrl = "https://example.com/images/laptopstand.jpg",
+        Listed = DateTime.Now.AddDays(-4),
+        Status = Status.Active,
+        SellerEmail = "seller6@example.com",
+        SoldTime = null
+    }
+};
+
 
 }
