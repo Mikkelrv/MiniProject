@@ -1,8 +1,6 @@
 ﻿@page "/listings"
-
-@foreach (var item in items){      
-<DisplayItemComponent _item="@item"/>
-}
+<SearchComponent></SearchComponent>
+<DisplayAllItemsComponent items="@items"/>
 
 @code {
 

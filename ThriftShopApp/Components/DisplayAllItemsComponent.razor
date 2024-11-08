@@ -1,0 +1,14 @@
+﻿<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+    @foreach (var item in items)
+    {
+        <div class="col">
+            <DisplayItemComponent _item="@item" />
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<Item> items { get; set; }
+}
+
