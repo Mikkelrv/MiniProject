@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThriftShopApp", "ThriftShopApp\ThriftShopApp.csproj", "{355983B4-49D4-4348-9F8B-77B70305F70C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThriftShopApp", "ThriftShopApp\ThriftShopApp.csproj", "{355983B4-49D4-4348-9F8B-77B70305F70C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThriftShopAPI", "ThriftShopAPI\ThriftShopAPI.csproj", "{C6C04260-E56C-4ED2-8F09-C86D2AA068A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThriftShopAPI", "ThriftShopAPI\ThriftShopAPI.csproj", "{C6C04260-E56C-4ED2-8F09-C86D2AA068A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThriftShopCore", "ThriftShopCore\ThriftShopCore.csproj", "{08095A55-E26C-402E-9049-6DC1370043E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThriftShopCore", "ThriftShopCore\ThriftShopCore.csproj", "{08095A55-E26C-402E-9049-6DC1370043E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

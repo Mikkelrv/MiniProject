@@ -1,0 +1,55 @@
+﻿@page "/login"
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Login</h3>
+                </div>
+                <div class="card-body">
+                    <EditForm EditContext="@_editContext" OnSubmit="@HandleSubmit">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <InputText id="email" class="form-control" @bind-Value="userAuthentication.Email" placeholder="Enter your email" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <InputText type="password" id="password" class="form-control" @bind-Value="userAuthentication.Password" placeholder="Enter your password" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
+                    </EditForm>
+
+                    <div class="text-center mt-3">
+                        <button class="btn btn-link">Don't have an account? Sign up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private UserAuthentication userAuthentication = new();
+    private EditContext? _editContext;
+
+    protected override void OnInitialized()
+	{
+        _editContext = new EditContext(userAuthentication);
+	
+	}
+
+    private async Task HandleSubmit()
+    {
+        
+        if (_editContext.Validate())
+        {
+           
+        }
+    }
+
+}

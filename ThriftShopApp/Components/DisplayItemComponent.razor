@@ -1,0 +1,21 @@
+﻿@using ThriftShopCore.Models
+
+<div class="card" style="width: 18rem;">
+    <!-- Image at the top -->
+    <img src="@_item.ImageUrl" class="card-img-top" alt="@_item.Name">
+
+    <!-- Card body with Name, Price, and Category -->
+    <div class="card-body">
+        <h5 class="card-title mb-1">@_item.Name</h5>
+        <p class="card-text mb-1 text-muted">$@_item.Price.ToString("F2")</p>
+        <p class="card-text text-muted">@_item.Category</p>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public Item _item { get; set; }
+
+
+}
