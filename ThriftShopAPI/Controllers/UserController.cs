@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ThriftShopAPI.Repositories;
 
 namespace ThriftShopAPI.Controllers
 {
@@ -6,6 +7,12 @@ namespace ThriftShopAPI.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-      
+        private IUserRepo _userRepo;
+        public UserController(IUserRepo userRepo)
+        {
+            _userRepo = userRepo;
+
+        }
+
     }
 }
