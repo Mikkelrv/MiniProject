@@ -1,5 +1,8 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using ThriftShopCore.Models;
+using MongoDB.Bson;
 
 namespace ThriftShopAPI.Repositories
 {
@@ -21,15 +24,15 @@ namespace ThriftShopAPI.Repositories
         }
         public void addItem(Item item)
         {
-            throw new NotImplementedException();
+            _collection.InsertOne(item);    
         }
 
-        public void deleteItem(string id)
+        public void deleteItem(ObjectId id)
         {
-            throw new NotImplementedException();
+            _collection.DeleteOne(item => item._id == id);
         }
 
-        public Item getItem(string id)
+        public Item getItem(ObjectId id)
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,5 @@
-﻿using ThriftShopCore.Models;
+﻿using MongoDB.Bson;
+using ThriftShopCore.Models;
 
 namespace ThriftShopAPI.Repositories
 {
@@ -9,12 +10,12 @@ namespace ThriftShopAPI.Repositories
             throw new NotImplementedException();
         }
 
-        public void DeleteUser(string id)
+        public void DeleteUser(ObjectId id)
         {
             throw new NotImplementedException();
         }
 
-        public User GetUser(string id)
+        public User GetUser(ObjectId id)
         {
             throw new NotImplementedException();
         }
