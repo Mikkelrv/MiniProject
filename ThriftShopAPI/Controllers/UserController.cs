@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ThriftShopAPI.Repositories;
+using ThriftShopCore.Models;
 
 namespace ThriftShopAPI.Controllers
 {
@@ -12,6 +13,40 @@ namespace ThriftShopAPI.Controllers
         {
             _userRepo = userRepo;
 
+        }
+
+        [HttpGet]
+        [Route("get/{id : string}")]
+        public IActionResult GetUser(string id)
+        {
+            var user = _userRepo.GetUser(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [HttpPut]
+        [Route("update/{user : User}")]
+        public IActionResult UpdateUser(User user)
+        {
+            _userRepo.UpdateUser(user);
+            return Ok();
+        }
+        [HttpDelete]
+        [Route("delete/{id : string}")]
+        public IActionResult DeleteUser(string id)
+        {
+            _userRepo.DeleteUser(id);
+            return Ok();
+        }
+        [HttpPost]
+        [Route("add")]
+        public IActionResult AddUser(User user)
+        {
+            _userRepo.AddUser(user);
+            return Ok();
         }
 
     }

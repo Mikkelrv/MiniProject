@@ -12,6 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IUserRepo, UserRepo>();
 builder.Services.AddSingleton<IItemsRepo, ItemsRepo>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
