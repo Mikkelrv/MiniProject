@@ -1,6 +1,7 @@
 ﻿using ThriftShopAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using ThriftShopCore.Models;
+using MongoDB.Bson;
 namespace ThriftShopAPI.Controllers
 {
     [ApiController]
@@ -16,7 +17,7 @@ namespace ThriftShopAPI.Controllers
 
         [HttpGet]
         [Route("get/{id : string}")]
-        public IActionResult GetItem(string id)
+        public IActionResult GetItem(ObjectId id)
         {
             var item = _repository.getItem(id);
             if (item == null)
@@ -35,7 +36,7 @@ namespace ThriftShopAPI.Controllers
         }
         [HttpDelete]
         [Route("delete/{id : string}")]
-        public IActionResult DeleteItem(string id)
+        public IActionResult DeleteItem(ObjectId id)
         {
             _repository.deleteItem(id);
             return Ok();
@@ -52,7 +53,7 @@ namespace ThriftShopAPI.Controllers
         [HttpPut]
         [Route("update/{id : string}")]
 
-        public IActionResult UpdateItem(string id, Item item)
+        public IActionResult UpdateItem(ObjectId id, Item item)
         {
             _repository.updateItem(item);
             return Ok();

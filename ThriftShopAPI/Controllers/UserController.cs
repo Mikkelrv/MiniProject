@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using ThriftShopAPI.Repositories;
 using ThriftShopCore.Models;
 
@@ -17,7 +18,7 @@ namespace ThriftShopAPI.Controllers
 
         [HttpGet]
         [Route("get/{id : string}")]
-        public IActionResult GetUser(string id)
+        public IActionResult GetUser(ObjectId id)
         {
             var user = _userRepo.GetUser(id);
             if (user == null)
@@ -36,7 +37,7 @@ namespace ThriftShopAPI.Controllers
         }
         [HttpDelete]
         [Route("delete/{id : string}")]
-        public IActionResult DeleteUser(string id)
+        public IActionResult DeleteUser(ObjectId id)
         {
             _userRepo.DeleteUser(id);
             return Ok();
