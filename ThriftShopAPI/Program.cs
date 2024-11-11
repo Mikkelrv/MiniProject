@@ -4,13 +4,20 @@ using ThriftShopAPI.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+var serviceCollection = new ServiceCollection();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IUserRepo, UserRepo>();
 builder.Services.AddSingleton<IItemsRepo, ItemsRepo>();
+
+
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
+serviceCollection.AddSingleton<IConfiguration>(configuration);
+
 
 
 var app = builder.Build();
