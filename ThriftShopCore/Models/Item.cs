@@ -1,8 +1,14 @@
-﻿namespace ThriftShopCore.Models
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
+
+namespace ThriftShopCore.Models
 
 {
     public class Item
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public ObjectId _id { get; set; }
         public required string Name { get; set; }
         public required double Price { get; set; }
         public required string Description { get; set; }
