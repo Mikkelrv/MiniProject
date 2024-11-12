@@ -12,6 +12,6 @@ namespace ThriftShopCore.Models
         public int MaxPrice { get; set; }
         public string Category { get; set; }
         public string Query { get; set; }
-        public Status Status { get; set; }
+        public string Status { get; set; }
     }
 }

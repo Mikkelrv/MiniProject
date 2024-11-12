@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace ThriftShopAPI.Repositories
 {
-    
+
     public class ItemsRepo : IItemsRepo
     {
         readonly private IConfiguration _config;
@@ -24,18 +24,12 @@ namespace ThriftShopAPI.Repositories
         }
         public void addItem(Item item)
         {
-            _collection.InsertOne(item);    
+            _collection.InsertOne(item);
         }
 
-        public void deleteItem(ObjectId id)
+        public void deleteItem(string id)
         {
             _collection.DeleteOne(item => item._id == id);
-        }
-
-        public Item getItem(ObjectId id)
-        {
-            var filter = Builders<Item>.Filter.Eq(item => item._id, id);
-            return _collection.Find(filter).FirstOrDefault();
         }
 
         public List<Item> getItems(Filter filter)

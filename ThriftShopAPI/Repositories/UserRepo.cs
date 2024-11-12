@@ -24,12 +24,12 @@ namespace ThriftShopAPI.Repositories
             _collection.InsertOne(user);
         }
 
-        public void DeleteUser(ObjectId id)
+        public void DeleteUser(string id)
         {
             _collection.DeleteOne(user => user._id == id);
         }
 
-        public User GetUser(ObjectId id)
+        public User GetUser(string id)
         {
             return _collection.Find(user => user._id == id).FirstOrDefault();
         }

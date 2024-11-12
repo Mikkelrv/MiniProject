@@ -12,7 +12,7 @@ namespace ThriftShopCore.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId _id { get; set; }
+        public string _id { get; set; }
         public required string Name { get; set; }
         public required string Email { get; set; }
         public List<Item> Purchases { get; set; } = new();
