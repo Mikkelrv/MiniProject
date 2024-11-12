@@ -4,10 +4,10 @@ namespace ThriftShopAPI.Repositories
 {
     public interface IUserRepo
     {
-        User GetUser(string id);
+        User GetUser(string email);
         void AddUser(User user);
         void UpdateUser(User user);
-        void DeleteUser(string id);
+        void DeleteUser(string email);
 
     }
 }

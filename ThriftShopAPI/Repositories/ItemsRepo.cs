@@ -34,37 +34,40 @@ namespace ThriftShopAPI.Repositories
 
         public List<Item> getItems(Filter filter)
         {
-            var minPriceFilter = Builders<Item>.Filter.Gte(item => item.Price, filter.MinPrice);
-            var maxPriceFilter = Builders<Item>.Filter.Lte(item => item.Price, filter.MaxPrice);
-            var categoryFilter = Builders<Item>.Filter.Eq(item => item.Category, filter.Category);
-            var statusFilter = Builders<Item>.Filter.Eq(item => item.Status, filter.Status);
-            var queryFilterName = Builders<Item>.Filter.Regex(item => item.Name, new BsonRegularExpression(filter.Query, "i"));
-            var queryFilterDescription = Builders<Item>.Filter.Regex(item => item.Description, new BsonRegularExpression(filter.Query, "i"));
+            var filterList = new List<FilterDefinition<Item>>();
 
-            var totalFilter = Builders<Item>.Filter.Empty;
-            if (filter.MinPrice != 0)
+            if (filter.MinPrice > 0)
             {
-                totalFilter = Builders<Item>.Filter.And(totalFilter, minPriceFilter);
+                filterList.Add(Builders<Item>.Filter.Gte(item => item.Price, filter.MinPrice));
             }
-            if (filter.MaxPrice != 0) {
-                totalFilter = Builders<Item>.Filter.And(totalFilter, maxPriceFilter);
-            }
-            if (filter.Category != null)
+
+            if (filter.MaxPrice > 0)
             {
-                totalFilter = Builders<Item>.Filter.And(totalFilter, categoryFilter);
+                filterList.Add(Builders<Item>.Filter.Lte(item => item.Price, filter.MaxPrice));
             }
-            if (filter.Status != null)
+
+            if (!string.IsNullOrEmpty(filter.Category))
             {
-                totalFilter = Builders<Item>.Filter.And(totalFilter, statusFilter);
+                filterList.Add(Builders<Item>.Filter.Eq(item => item.Category, filter.Category));
             }
-            if (filter.Query != null)
+
+            if (!string.IsNullOrEmpty(filter.Status))
             {
-                totalFilter = Builders<Item>.Filter.And(totalFilter, Builders<Item>.Filter.Or(queryFilterName, queryFilterDescription));
+                filterList.Add(Builders<Item>.Filter.Eq(item => item.Status, filter.Status));
             }
+
+            if (!string.IsNullOrEmpty(filter.Query))
+            {
+                var queryFilter = Builders<Item>.Filter.Or(
+                    Builders<Item>.Filter.Regex(item => item.Name, new BsonRegularExpression(filter.Query, "i")),
+                    Builders<Item>.Filter.Regex(item => item.Description, new BsonRegularExpression(filter.Query, "i"))
+                );
+                filterList.Add(queryFilter);
+            }
+
+            var totalFilter = filterList.Count > 0 ? Builders<Item>.Filter.And(filterList) : Builders<Item>.Filter.Empty;
 
             return _collection.Find(totalFilter).ToList();
-
-
         }
 
         public void updateItem(Item item)

@@ -8,7 +8,7 @@ namespace ThriftShopCore.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string _id { get; set; }
+        public string? _id { get; set; }
         public required string Name { get; set; }
         public required double Price { get; set; }
         public required string Description { get; set; }

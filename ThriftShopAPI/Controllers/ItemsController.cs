@@ -40,7 +40,6 @@ namespace ThriftShopAPI.Controllers
 
         [HttpPut]
         [Route("update")]
-
         public IActionResult UpdateItem(string id, Item item)
         {
             _repository.updateItem(item);
