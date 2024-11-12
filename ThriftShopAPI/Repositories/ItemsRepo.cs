@@ -32,42 +32,44 @@ namespace ThriftShopAPI.Repositories
             _collection.DeleteOne(item => item._id == id);
         }
 
-        public List<Item> getItems(Filter filter)
+        public async Task<IEnumerable<Item>> getItems(int maxPrice, int minPrice, string category, string query, string status)
         {
             var filterList = new List<FilterDefinition<Item>>();
 
-            if (filter.MinPrice > 0)
+            if (minPrice > 0)
             {
-                filterList.Add(Builders<Item>.Filter.Gte(item => item.Price, filter.MinPrice));
+                filterList.Add(Builders<Item>.Filter.Gte(item => item.Price, minPrice));
             }
 
-            if (filter.MaxPrice > 0)
+            if (maxPrice > 0)
             {
-                filterList.Add(Builders<Item>.Filter.Lte(item => item.Price, filter.MaxPrice));
+                filterList.Add(Builders<Item>.Filter.Lte(item => item.Price, maxPrice));
             }
 
-            if (!string.IsNullOrEmpty(filter.Category))
+            if (!string.IsNullOrEmpty(category))
             {
-                filterList.Add(Builders<Item>.Filter.Eq(item => item.Category, filter.Category));
+                filterList.Add(Builders<Item>.Filter.Eq(item => item.Category, category));
             }
 
-            if (!string.IsNullOrEmpty(filter.Status))
+            if (!string.IsNullOrEmpty(status))
             {
-                filterList.Add(Builders<Item>.Filter.Eq(item => item.Status, filter.Status));
+                filterList.Add(Builders<Item>.Filter.Eq(item => item.Status, status));
             }
 
-            if (!string.IsNullOrEmpty(filter.Query))
+            if (!string.IsNullOrEmpty(query))
             {
                 var queryFilter = Builders<Item>.Filter.Or(
-                    Builders<Item>.Filter.Regex(item => item.Name, new BsonRegularExpression(filter.Query, "i")),
-                    Builders<Item>.Filter.Regex(item => item.Description, new BsonRegularExpression(filter.Query, "i"))
+                    Builders<Item>.Filter.Regex(item => item.Name, new BsonRegularExpression(query, "i")),
+                    Builders<Item>.Filter.Regex(item => item.Description, new BsonRegularExpression(query, "i"))
                 );
                 filterList.Add(queryFilter);
             }
 
             var totalFilter = filterList.Count > 0 ? Builders<Item>.Filter.And(filterList) : Builders<Item>.Filter.Empty;
 
-            return _collection.Find(totalFilter).ToList();
+            var items = await _collection.Find(totalFilter).ToListAsync();
+
+            return items;
         }
 
         public void updateItem(Item item)

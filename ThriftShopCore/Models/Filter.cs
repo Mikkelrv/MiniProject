@@ -10,8 +10,8 @@ namespace ThriftShopCore.Models
     {
         public int MinPrice { get; set; } = 0;
         public int MaxPrice { get; set; } = 0;
-        public string Category { get; set; } = null;
-        public string Query { get; set; } = null;
-        public string Status { get; set; } = null;
+        public string? Category { get; set; } = null;
+        public string? Query { get; set; } = null;
+        public string? Status { get; set; } = null;
     }
 }

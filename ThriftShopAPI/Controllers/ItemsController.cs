@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ThriftShopCore.Models;
 using MongoDB.Bson;
+using System.Collections;
 namespace ThriftShopAPI.Controllers
 {
     [ApiController]
@@ -17,10 +18,17 @@ namespace ThriftShopAPI.Controllers
 
         [HttpGet]
         [Route("get/all")]
-        public IActionResult GetItems(Filter filter)
+        public async Task<IEnumerable<Item>> GetItems([FromQuery] Filter filter)
         {
-            var items = _repository.getItems(filter);
-            return Ok(items);
+            var items = await _repository.getItems(filter.MaxPrice, filter.MinPrice, filter.Category, filter.Query, filter.Status);
+            if (items == null) {
+                throw new Exception("List is null");
+            }
+            if (items.Count() == 0) {
+                throw new Exception("List is empty");
+            }
+
+            return items;
         }
         [HttpDelete]
         [Route("delete")]
