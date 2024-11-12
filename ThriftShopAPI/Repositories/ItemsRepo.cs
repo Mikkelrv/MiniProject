@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace ThriftShopAPI.Repositories
 {
-    
+
     public class ItemsRepo : IItemsRepo
     {
         readonly private IConfiguration _config;
@@ -24,53 +24,52 @@ namespace ThriftShopAPI.Repositories
         }
         public void addItem(Item item)
         {
-            _collection.InsertOne(item);    
+            _collection.InsertOne(item);
         }
 
-        public void deleteItem(ObjectId id)
+        public void deleteItem(string id)
         {
             _collection.DeleteOne(item => item._id == id);
         }
 
-        public Item getItem(ObjectId id)
+        public async Task<IEnumerable<Item>> getItems(int maxPrice, int minPrice, string category, string query, string status)
         {
-            var filter = Builders<Item>.Filter.Eq(item => item._id, id);
-            return _collection.Find(filter).FirstOrDefault();
-        }
+            var filterList = new List<FilterDefinition<Item>>();
 
-        public List<Item> getItems(Filter filter)
-        {
-            var minPriceFilter = Builders<Item>.Filter.Gte(item => item.Price, filter.MinPrice);
-            var maxPriceFilter = Builders<Item>.Filter.Lte(item => item.Price, filter.MaxPrice);
-            var categoryFilter = Builders<Item>.Filter.Eq(item => item.Category, filter.Category);
-            var statusFilter = Builders<Item>.Filter.Eq(item => item.Status, filter.Status);
-            var queryFilterName = Builders<Item>.Filter.Regex(item => item.Name, new BsonRegularExpression(filter.Query, "i"));
-            var queryFilterDescription = Builders<Item>.Filter.Regex(item => item.Description, new BsonRegularExpression(filter.Query, "i"));
-
-            var totalFilter = Builders<Item>.Filter.Empty;
-            if (filter.MinPrice != 0)
+            if (minPrice > 0)
             {
-                totalFilter = Builders<Item>.Filter.And(totalFilter, minPriceFilter);
-            }
-            if (filter.MaxPrice != 0) {
-                totalFilter = Builders<Item>.Filter.And(totalFilter, maxPriceFilter);
-            }
-            if (filter.Category != null)
-            {
-                totalFilter = Builders<Item>.Filter.And(totalFilter, categoryFilter);
-            }
-            if (filter.Status != null)
-            {
-                totalFilter = Builders<Item>.Filter.And(totalFilter, statusFilter);
-            }
-            if (filter.Query != null)
-            {
-                totalFilter = Builders<Item>.Filter.And(totalFilter, Builders<Item>.Filter.Or(queryFilterName, queryFilterDescription));
+                filterList.Add(Builders<Item>.Filter.Gte(item => item.Price, minPrice));
             }
 
-            return _collection.Find(totalFilter).ToList();
+            if (maxPrice > 0)
+            {
+                filterList.Add(Builders<Item>.Filter.Lte(item => item.Price, maxPrice));
+            }
 
+            if (!string.IsNullOrEmpty(category))
+            {
+                filterList.Add(Builders<Item>.Filter.Eq(item => item.Category, category));
+            }
 
+            if (!string.IsNullOrEmpty(status))
+            {
+                filterList.Add(Builders<Item>.Filter.Eq(item => item.Status, status));
+            }
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                var queryFilter = Builders<Item>.Filter.Or(
+                    Builders<Item>.Filter.Regex(item => item.Name, new BsonRegularExpression(query, "i")),
+                    Builders<Item>.Filter.Regex(item => item.Description, new BsonRegularExpression(query, "i"))
+                );
+                filterList.Add(queryFilter);
+            }
+
+            var totalFilter = filterList.Count > 0 ? Builders<Item>.Filter.And(filterList) : Builders<Item>.Filter.Empty;
+
+            var items = await _collection.Find(totalFilter).ToListAsync();
+
+            return items;
         }
 
         public void updateItem(Item item)

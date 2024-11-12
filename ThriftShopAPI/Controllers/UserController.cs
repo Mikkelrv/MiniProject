@@ -17,8 +17,8 @@ namespace ThriftShopAPI.Controllers
         }
 
         [HttpGet]
-        [Route("get/{id : string}")]
-        public IActionResult GetUser(ObjectId id)
+        [Route("get")]
+        public IActionResult GetUser(string id)
         {
             var user = _userRepo.GetUser(id);
             if (user == null)
@@ -29,15 +29,15 @@ namespace ThriftShopAPI.Controllers
         }
 
         [HttpPut]
-        [Route("update/{user : User}")]
+        [Route("update")]
         public IActionResult UpdateUser(User user)
         {
             _userRepo.UpdateUser(user);
             return Ok();
         }
         [HttpDelete]
-        [Route("delete/{id : string}")]
-        public IActionResult DeleteUser(ObjectId id)
+        [Route("delete")]
+        public IActionResult DeleteUser(string id)
         {
             _userRepo.DeleteUser(id);
             return Ok();

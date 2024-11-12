@@ -24,19 +24,25 @@ namespace ThriftShopAPI.Repositories
             _collection.InsertOne(user);
         }
 
-        public void DeleteUser(ObjectId id)
+        public void DeleteUser(string email)
         {
-            _collection.DeleteOne(user => user._id == id);
+            _collection.DeleteOne(user => user.Email == email);
         }
 
-        public User GetUser(ObjectId id)
+        public User GetUser(string email)
         {
-            return _collection.Find(user => user._id == id).FirstOrDefault();
+            return _collection.Find(user => user.Email == email).FirstOrDefault();
         }
 
-        public void UpdateUser(User user)
+        public void UpdateUser(User updatedUser)
         {
-            _collection.ReplaceOne(user => user._id == user._id, user);
+            var filter = Builders<User>.Filter.Eq("Email", updatedUser.Email);
+            var update = Builders<User>.Update
+                .Set(u => u.Name, updatedUser.Name)
+                .Set(u => u.Purchases, updatedUser.Purchases)
+                .Set(u => u.Selling, updatedUser.Selling);
+
+            _collection.UpdateOne(filter, update);
         }
     }
 }

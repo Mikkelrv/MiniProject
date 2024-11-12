@@ -6,9 +6,8 @@ namespace ThriftShopAPI.Repositories
     public interface IItemsRepo
     {
         void addItem(Item item);
-        void deleteItem(ObjectId id);
-        List<Item> getItems(Filter filter);
-        Item getItem(ObjectId id);
+        void deleteItem(string id);
+        Task<IEnumerable<Item>> getItems(int maxPrice, int minPrice, string category, string query, string status);
         void updateItem(Item item);
     }
 }
