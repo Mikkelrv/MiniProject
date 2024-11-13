@@ -24,11 +24,9 @@ builder.Services.AddCors(options =>
 
 
 var configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
-    .Build();
+	.AddJsonFile("appsettings.json")
+	.Build();
 serviceCollection.AddSingleton<IConfiguration>(configuration);
-
-
 
 var app = builder.Build();
 app.UseCors("AllowBlazorApp");
@@ -36,8 +34,8 @@ app.UseCors("AllowBlazorApp");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
