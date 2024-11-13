@@ -1,6 +1,7 @@
 ﻿@using ThriftShopCore.Models
+@inject IJSRuntime JS // Optional, to control scroll locking when modal is open 
 
-<div class="card" style="width: 18rem;">
+<div class="card" style="width: 18rem;" @onclick="ShowDetail">
     <!-- Image at the top -->
     <img src="@_item.ImageUrl" class="card-img-top" alt="@_item.Name">
 
@@ -12,10 +13,91 @@
     </div>
 </div>
 
-@code {
+@if (showModal)
+{
+    <!-- Modal overlay -->
+    <div class="modal-overlay" @onclick="CloseDetail">
+        <!-- Detailed item modal -->
+        <div class="item-detail-modal card shadow" @onclick:stopPropagation="true">
+            <img src="@_item.ImageUrl" class="card-img-top" alt="@_item.Name" />
 
+            <div class="card-body">
+                <button type="button" class="btn-close float-end" aria-label="Close" @onclick="CloseDetail"></button>
+                <h5 class="card-title">@_item.Name</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@_item.Category</h6>
+
+                <p class="card-text"><strong>Price:</strong> $@_item.Price.ToString("F2")</p>
+                <p class="card-text"><strong>Description:</strong> @_item.Description</p>
+                <p class="card-text"><strong>Status:</strong> <span class="badge bg-success">@_item.Status</span></p>
+                <p class="card-text"><strong>Seller:</strong> <a href="mailto:@_item.SellerEmail">@_item.SellerEmail</a></p>
+                <p class="card-text"><strong>Listed On:</strong> @_item.Listed.ToString("MMMM dd, yyyy")</p>
+                <button class="btn btn-primary" @onclick="()=>reserveItem(_item)">Reserve Item</button>
+
+                <a href="#" class="btn btn-primary mt-3">Contact Seller</a>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .item-detail-modal {
+        position: relative;
+        max-width: 500px;
+        width: 90%;
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        z-index: 1001;
+    }
+
+    .btn-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    body.modal-open {
+        overflow: hidden; /* Prevent scrolling when modal is open */
+    }
+</style>
+
+@code {
     [Parameter]
     public Item _item { get; set; }
 
+    private bool showModal = false;
 
+    
+
+    private void ShowDetail()
+    {
+        showModal = true;
+        JS.InvokeVoidAsync("document.body.classList.add", "modal-open"); // Optional: disable body scroll when modal opens
+    }
+
+    private void CloseDetail()
+    {
+        showModal = false;
+        JS.InvokeVoidAsync("document.body.classList.remove", "modal-open"); // Optional: re-enable body scroll when modal closes
+        StateHasChanged();
+    }
+
+    public void reserveItem(Item item)
+	{
+		item.Status = "Reserved";
+        StateHasChanged();
+	}
 }

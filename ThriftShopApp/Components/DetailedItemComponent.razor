@@ -1,0 +1,63 @@
+﻿@using System.Globalization
+
+<!-- Background overlay -->
+<div class="overlay" @onclick="OnClose"></div>
+
+<!-- Centered item card -->
+<div class="item-detail-modal card shadow-sm">
+    <img src="@Item.ImageUrl" class="card-img-top" alt="@Item.Name" />
+
+    <div class="card-body">
+        <button type="button" class="btn-close float-end" aria-label="Close" @onclick="OnClose"></button>
+        <h5 class="card-title">@Item.Name</h5>
+        <h6 class="card-subtitle mb-2 text-muted">@Item.Category</h6>
+
+        <p class="card-text"><strong>Price:</strong> @Item.Price.ToString("C", CultureInfo.CurrentCulture)</p>
+        <p class="card-text"><strong>Description:</strong> @Item.Description</p>
+        <p class="card-text"><strong>Status:</strong> <span class="badge bg-success">@Item.Status</span></p>
+        <p class="card-text"><strong>Seller:</strong> <a href="mailto:@Item.SellerEmail">@Item.SellerEmail</a></p>
+        <p class="card-text"><strong>Listed On:</strong> @Item.Listed.ToString("MMMM dd, yyyy")</p>
+        <a href="#" class="btn btn-primary mt-3">Contact Seller</a>
+    </div>
+</div>
+
+<style>
+    /* Full-screen overlay with transparent grey */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5); /* Transparent grey */
+        z-index: 999; /* Layer behind the modal */
+    }
+
+    /* Centered modal card */
+    .item-detail-modal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        max-width: 500px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        z-index: 1000; /* Ensures it’s on top of other content */
+    }
+
+    .btn-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public Item Item { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; } // Optional close action
+}

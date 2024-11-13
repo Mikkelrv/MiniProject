@@ -1,11 +1,19 @@
 ﻿@page "/listings"
+@inject HttpClient Http
 <SearchComponent></SearchComponent>
-<DisplayAllItemsComponent items="@items"/>
-<LoginComponent></LoginComponent>
+<DisplayAllItemsComponent items="@_items" />
+
 
 @code {
-    List<Item> items = new List<Item>();
-};
 
+	private User? _user;
+	private List<Item> _items;
+	private Filter filter = new(){ Status = "Active"};
 
+	protected async override Task OnInitializedAsync()
+	{
+		_items = await Http.GetFromJsonAsync<List<Item>>($"api/items/get/all?filter={filter}") ?? new List<Item>(); 
+	}
+
+	
 }
