@@ -72,7 +72,7 @@
 
     }
 
-    private void Bypass()
+    private async Task Bypass()
     {
         var adminUser = new User
         {
@@ -135,8 +135,21 @@
             }
         });
 
-        loginService.Login(adminUser);
-        navManager.NavigateTo(target);
+        var response = await Http.PostAsJsonAsync("https://localhost:7077/api/Login", userAuthentication);
+        if (response.IsSuccessStatusCode)
+        {
+            user = await response.Content.ReadFromJsonAsync<User>();
+            if (user != null)
+            {
+                loginService.Login(user);
+                navManager.NavigateTo(target);
+            }
+        }
+        else
+        {
+            // Handle login failure (e.g., show error message)
+            Console.WriteLine("Login failed");
+        }
     }
 
 }
