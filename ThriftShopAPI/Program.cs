@@ -11,6 +11,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IUserRepo, UserRepo>();
 builder.Services.AddSingleton<IItemsRepo, ItemsRepo>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazorApp", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+
 
 
 var configuration = new ConfigurationBuilder()
@@ -21,6 +31,7 @@ serviceCollection.AddSingleton<IConfiguration>(configuration);
 
 
 var app = builder.Build();
+app.UseCors("AllowBlazorApp");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

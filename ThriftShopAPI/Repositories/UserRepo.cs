@@ -29,9 +29,9 @@ namespace ThriftShopAPI.Repositories
             _collection.DeleteOne(user => user.Email == email);
         }
 
-        public User GetUser(string email)
+        public async Task<User> GetUser(string email)
         {
-            return _collection.Find(user => user.Email == email).FirstOrDefault();
+            return await _collection.Find(Builders<User>.Filter.Eq("Email", email)).FirstOrDefaultAsync();
         }
 
         public void UpdateUser(User updatedUser)

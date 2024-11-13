@@ -29,7 +29,7 @@ namespace ThriftShopAPI.Repositories
 
         public void deleteItem(string id)
         {
-            _collection.DeleteOne(item => item._id == id);
+            if (id != null) _collection.DeleteOne(item => item._id == id);
         }
 
         public async Task<IEnumerable<Item>> getItems(int maxPrice, int minPrice, string category, string query, string status)
