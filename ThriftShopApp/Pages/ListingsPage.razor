@@ -1,6 +1,8 @@
 ﻿@page "/listings"
 @inject NavigationManager navManager
 @inject ILoginService loginService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
 <SearchComponent></SearchComponent>
 <DisplayAllItemsComponent items="@items"/>
 
@@ -8,11 +10,15 @@
 @code {
     public User? user;
     public List<Item> items = new List<Item>();
+    private Filter Filter;
 
     protected override async Task OnInitializedAsync()
     {
+
         user = await loginService.GetUserLoggedIn();
         if (user is null)
             navManager.NavigateTo("login/listings");
+
+       
     }
 }

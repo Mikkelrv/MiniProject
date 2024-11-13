@@ -1,4 +1,5 @@
-﻿
+﻿@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
 <div class="container mt-3">
     <div class="input-group">
         <!-- Text input -->
@@ -36,11 +37,14 @@
 
 
 @code {
-    [Parameter]
     public Filter Filter { get; set; } = new Filter();
 
     [Parameter]
     public bool showStatusOptions { get; set; }
+
+    
+
+    private async Task UpdateLocalStorage() => await localStorage.SetItemAsync<Filter>("filterkey", Filter);
 
     
 }
