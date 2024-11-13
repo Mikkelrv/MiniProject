@@ -17,7 +17,6 @@ namespace ThriftShopCore.Models
         public required string Email { get; set; }
         public List<Item> Purchases { get; set; } = new();
         public List<Item> Selling { get; set; } = new();
-
         public required string Password { get; set; }
     }
 }
