@@ -1,0 +1,18 @@
+﻿@page "/listings"
+@inject NavigationManager navManager
+@inject ILoginService loginService
+<SearchComponent></SearchComponent>
+<DisplayAllItemsComponent items="@items"/>
+
+
+@code {
+    public User? user;
+    public List<Item> items = new List<Item>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await loginService.GetUserLoggedIn();
+        if (user is null)
+            navManager.NavigateTo("login/listings");
+    }
+}

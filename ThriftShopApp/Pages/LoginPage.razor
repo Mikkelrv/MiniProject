@@ -1,5 +1,10 @@
-﻿@page "/login"
+﻿@page "/login/{target:alpha}"
 @using Microsoft.AspNetCore.Components.Forms
+@inject NavigationManager navManager
+@using MongoDB.Bson
+@inject ILoginService loginService
+
+@inject HttpClient Http
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -36,20 +41,34 @@
 
     private UserAuthentication userAuthentication = new();
     private EditContext? _editContext;
+    private User? user = null;
+    [Parameter]
+    public string target { get; set; }
 
     protected override void OnInitialized()
-	{
+    {
         _editContext = new EditContext(userAuthentication);
-	
-	}
+
+    }
 
     private async Task HandleSubmit()
     {
-        
-        if (_editContext.Validate())
+        var response = await Http.PostAsJsonAsync("https://localhost:7077/api/Login", userAuthentication);
+        if (response.IsSuccessStatusCode)
         {
-           
+            user = await response.Content.ReadFromJsonAsync<User>();
+            if (user != null)
+            {
+                loginService.Login(user);
+                navManager.NavigateTo(target);
+            }
         }
+        else
+        {
+            // Handle login failure (e.g., show error message)
+            Console.WriteLine("Login failed");
+        }
+
     }
 
 }

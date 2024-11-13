@@ -13,12 +13,15 @@ builder.Services.AddSingleton<IUserRepo, UserRepo>();
 builder.Services.AddSingleton<IItemsRepo, ItemsRepo>();
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("AllowBlazorApp", policy =>
-	{
-		policy.AllowAnyOrigin().AllowAnyHeader()
-			  .AllowAnyMethod();
-	});
+    options.AddPolicy("AllowBlazorApp", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
+
+
+
 
 var configuration = new ConfigurationBuilder()
 	.AddJsonFile("appsettings.json")
