@@ -74,6 +74,7 @@
 
     private async Task Bypass()
     {
+        var img = "https://media.discordapp.net/attachments/1096887979903045674/1306282399507677286/mqdefault.png?ex=673619c9&is=6734c849&hm=c80dabc09a8fb4e241a6e98101fbbf9ee7770a6be0904d7bb6317edfe695ca34&=&format=webp&quality=lossless&width=267&height=150";
         var adminUser = new User
         {
             Name = "Admin User",
@@ -90,7 +91,7 @@
                 Price = 799.99,
                 Description = "A powerful gaming laptop",
                 Category = "Electronics",
-                ImageUrl = "https://via.placeholder.com/150",
+                ImageUrl = img,
                 SellerEmail = "seller1@example.com",
                 Listed = DateTime.Now.AddDays(-10),
                 Status = "Active"
@@ -101,7 +102,7 @@
                 Price = 499.99,
                 Description = "Latest model smartphone",
                 Category = "Electronics",
-                ImageUrl = "https://via.placeholder.com/150",
+                ImageUrl = img,
                 SellerEmail = "seller2@example.com",
                 Listed = DateTime.Now.AddDays(-5),
                 Status = "Active"
@@ -117,7 +118,7 @@
                 Price = 129.99,
                 Description = "Noise-cancelling wireless headphones",
                 Category = "Accessories",
-                ImageUrl = "https://via.placeholder.com/150",
+                ImageUrl = img,
                 SellerEmail = adminUser.Email,
                 Listed = DateTime.Now.AddDays(-2),
                 Status = "Active"
@@ -128,28 +129,15 @@
                 Price = 89.99,
                 Description = "Portable bluetooth speaker with great sound",
                 Category = "Accessories",
-                ImageUrl = "https://via.placeholder.com/150",
+                ImageUrl = img,
                 SellerEmail = adminUser.Email,
                 Listed = DateTime.Now.AddDays(-3),
                 Status = "Active"
             }
         });
-
-        var response = await Http.PostAsJsonAsync("https://localhost:7077/api/Login", userAuthentication);
-        if (response.IsSuccessStatusCode)
-        {
-            user = await response.Content.ReadFromJsonAsync<User>();
-            if (user != null)
-            {
-                loginService.Login(user);
-                navManager.NavigateTo(target);
-            }
-        }
-        else
-        {
-            // Handle login failure (e.g., show error message)
-            Console.WriteLine("Login failed");
-        }
+        loginService.Login(adminUser);
+        navManager.NavigateTo(target);
+        
     }
 
 }
