@@ -6,7 +6,7 @@ using ThriftShopCore.Models;
 namespace ThriftShopAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private IUserRepo _userRepo;
