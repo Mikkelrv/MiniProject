@@ -1,7 +1,8 @@
-﻿@page "/login"
+﻿@page "/login/{target:alpha}"
 @using Microsoft.AspNetCore.Components.Forms
 @inject NavigationManager navManager
 @using MongoDB.Bson
+@inject ILoginService loginService
 
 @inject HttpClient Http
 
@@ -41,6 +42,8 @@
     private UserAuthentication userAuthentication = new();
     private EditContext? _editContext;
     private User? user = null;
+    [Parameter]
+    public string target { get; set; }
 
     protected override void OnInitialized()
     {
@@ -56,7 +59,8 @@
             user = await response.Content.ReadFromJsonAsync<User>();
             if (user != null)
             {
-                navManager.NavigateTo("/listings");
+                loginService.Login(user);
+                navManager.NavigateTo(target);
             }
         }
         else
