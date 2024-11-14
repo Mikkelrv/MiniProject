@@ -26,6 +26,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
+                        <button type="button" class="btn btn-secondary w-100 mt-3" @onclick="@Bypass">Bypass</button>
                     </EditForm>
 
                     <div class="text-center mt-3">
@@ -71,9 +72,78 @@
 
     }
 
+<<<<<<< HEAD
+    private async Task Bypass()
+    {
+        var img = "https://media.discordapp.net/attachments/1096887979903045674/1306282399507677286/mqdefault.png?ex=673619c9&is=6734c849&hm=c80dabc09a8fb4e241a6e98101fbbf9ee7770a6be0904d7bb6317edfe695ca34&=&format=webp&quality=lossless&width=267&height=150";
+        var adminUser = new User
+        {
+            Name = "Admin User",
+            Email = "admin@example.com",
+            Password = "securepassword123"
+        };
+
+        // Adding mock purchased items
+        adminUser.Purchases.AddRange(new List<Item>
+        {
+            new Item
+            {
+                Name = "Laptop",
+                Price = 799.99,
+                Description = "A powerful gaming laptop",
+                Category = "Electronics",
+                ImageUrl = img,
+                SellerEmail = "seller1@example.com",
+                Listed = DateTime.Now.AddDays(-10),
+                Status = "Active"
+            },
+            new Item
+            {
+                Name = "Smartphone",
+                Price = 499.99,
+                Description = "Latest model smartphone",
+                Category = "Electronics",
+                ImageUrl = img,
+                SellerEmail = "seller2@example.com",
+                Listed = DateTime.Now.AddDays(-5),
+                Status = "Active"
+            }
+        });
+
+        // Adding mock selling items
+        adminUser.Selling.AddRange(new List<Item>
+        {
+            new Item
+            {
+                Name = "Wireless Headphones",
+                Price = 129.99,
+                Description = "Noise-cancelling wireless headphones",
+                Category = "Accessories",
+                ImageUrl = img,
+                SellerEmail = adminUser.Email,
+                Listed = DateTime.Now.AddDays(-2),
+                Status = "Active"
+            },
+            new Item
+            {
+                Name = "Bluetooth Speaker",
+                Price = 89.99,
+                Description = "Portable bluetooth speaker with great sound",
+                Category = "Accessories",
+                ImageUrl = img,
+                SellerEmail = adminUser.Email,
+                Listed = DateTime.Now.AddDays(-3),
+                Status = "Active"
+            }
+        });
+        loginService.Login(adminUser);
+        navManager.NavigateTo(target);
+        
+=======
     public void createAccount()
     {
         navManager.NavigateTo("createuser");
+>>>>>>> master
     }
 
 }
