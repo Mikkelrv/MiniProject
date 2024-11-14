@@ -1,0 +1,60 @@
+﻿@page "/createItem"
+@inject ILoginService login
+@inject HttpClient Http
+
+<h3>CreateItemComponent</h3>
+<EditForm Model="@item" OnSubmit="@HandleSubmit" class="row p-3">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="name">Name</label>
+        <InputText id="name" class="form-control" @bind-Value="item.Name" placeholder="Name of item" />
+    </div>
+    <div class="form-group">
+        <label for="price">Price</label>
+        <InputNumber id="Price" class="form-control" @bind-Value="item.Price" placeholder="Price" />
+    </div>
+    <div>
+        <label for="category">Category</label>
+        <InputSelect id="Price" class="form-control" @bind-Value="item.Category" placeholder="Category">
+            @foreach (string category in categories.CategoriesList)
+            {
+                <option value=@category>@category</option>
+            }
+        </InputSelect>
+    </div>
+    <div>
+        <label for="Description">Description</label>
+        <InputText id="description" class="form-control" @bind-Value="item.Description" placeholder="Description" />
+    </div>
+    <div>
+        <label for="imgURL">Image URL</label>
+        <InputText id="img" class="form-control" @bind-Value="item.ImageUrl" placeholder="ImageURL" />
+    </div>
+</EditForm>
+
+@code {
+    public User? user { get; set; }
+    public Categories categories = new();
+    public Item item = new Item
+        {
+            Name = "name",
+            Price = 10,
+            Description = "write description",
+            Category = "Miscellaneous",
+            ImageUrl = "https://images.dog.ceo/breeds/cockapoo/george-tongue.jpg",
+            SellerEmail = "",
+            Listed = DateTime.Now,
+            Status = "Active"
+        };
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await login.GetUserLoggedIn();
+    }
+
+    private async Task HandleSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("https://localhost:7077/api/items/add", item);
+    }
+}
