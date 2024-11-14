@@ -1,0 +1,47 @@
+﻿@inject IImgurService ImgurService
+@inject IJSRuntime JSRuntime
+
+<InputFile OnChange="@OnFileSelected" />
+<button @onclick="UploadImage" disabled="@(!_fileSelected)">Upload</button>
+
+@if (!string.IsNullOrEmpty(_imgurUrl))
+{
+    <div>
+        <p>Uploaded Image:</p>
+        <img src="@_imgurUrl" alt="Uploaded Image" />
+        <p>Image URL: @_imgurUrl</p>
+    </div>
+}
+
+@code {
+    private bool _fileSelected = false;
+    private string? _imgurUrl;
+    private IBrowserFile? _selectedFile;
+
+    private void OnFileSelected(InputFileChangeEventArgs e)
+    {
+        _selectedFile = e.File;
+        _fileSelected = true;
+    }
+
+    private async Task UploadImage()
+    {
+        if (_selectedFile != null)
+        {
+            try
+            {
+                using var stream = _selectedFile.OpenReadStream();
+                using var ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                var imageData = ms.ToArray();
+                _imgurUrl = await ImgurService.UploadImageAsync(imageData);
+                StateHasChanged();
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error uploading image: {ex.Message}");
+                // You might want to show this error to the user
+            }
+        }
+    }
+}

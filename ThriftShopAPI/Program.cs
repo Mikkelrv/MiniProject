@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IUserRepo, UserRepo>();
 builder.Services.AddSingleton<IItemsRepo, ItemsRepo>();
+builder.Services.AddSingleton<IImgurRepo, ImgurRepo>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorApp", policy =>
@@ -19,6 +20,7 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+builder.Services.AddHttpClient<IImgurRepo, ImgurRepo>();
 
 
 
@@ -27,6 +29,7 @@ var configuration = new ConfigurationBuilder()
 	.AddJsonFile("appsettings.json")
 	.Build();
 serviceCollection.AddSingleton<IConfiguration>(configuration);
+
 
 var app = builder.Build();
 app.UseCors("AllowBlazorApp");
@@ -41,6 +44,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+
 
 app.MapControllers();
 
