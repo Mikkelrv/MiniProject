@@ -17,7 +17,6 @@ namespace ThriftShopCore.Models
         public required DateTime Listed { get; set; } = DateTime.Now;
         public required string Status { get; set; } = "Active";
         public required string SellerEmail { get; set; }
-
         public DateTime? SoldTime { get; set; }
 
     }

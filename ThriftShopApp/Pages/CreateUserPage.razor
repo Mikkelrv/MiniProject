@@ -1,0 +1,71 @@
+﻿@page "/createuser"
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager navManager
+@inject HttpClient Http
+@inject ILoginService login
+
+<h1 class="mb-3 mt-3">Create new user</h1>
+<p style="color:red; display:@(emailNotAvailable? "block" : "none" )"> Email not available </p>
+<EditForm Model="@user" OnSubmit="@HandleSubmit" class="row p-3">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" class="form-control" @bind-Value="user.Email" placeholder="Enter your email" />
+    </div>
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <InputText id="email" class="form-control" @bind-Value="user.Name" placeholder="Enter the Name" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText type="password" id="password" class="form-control" @bind-Value="user.Password" placeholder="Enter your password" />
+    </div>
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Submit</button> 
+    </div>
+</EditForm>
+
+
+
+@code {
+    private bool emailNotAvailable = false;
+    private User user = new User {
+        Name = "",
+        Email = "",
+        Purchases = new List<Item>(),
+        Selling = new List<Item>(),
+        Password = ""        
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    private async Task HandleSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("https://localhost:7077/api/User/add", user);
+        if (response.IsSuccessStatusCode)
+        {
+            user = await response.Content.ReadFromJsonAsync<User>();
+            if (user != null)
+            {
+                await login.Login(user);
+                navManager.NavigateTo("myprofile");
+            }
+        }
+        else
+        {
+            user = new User
+                {
+                    Name = "",
+                    Email = "",
+                    Purchases = new List<Item>(),
+                    Selling = new List<Item>(),
+                    Password = ""
+                };
+
+            Console.WriteLine("Login failed");
+        }
+    }
+}

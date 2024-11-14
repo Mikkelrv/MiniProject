@@ -1,46 +1,66 @@
-﻿
-<div class="container mt-3">
-    <div class="input-group">
-        <!-- Text input -->
-        <input type="text" class="form-control" placeholder="Enter text">
+﻿@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject HttpClient Http
 
-        <!-- First dropdown -->
-        <div class="input-group-append">
-            <select class="form-select">
-                <option selected>Option 1</option>
-                <option value="2">Option 2</option>
-                <option value="3">Option 3</option>
-            </select>
-        </div>
+<div class="container mt-4">
+    <div class="input-group mb-3">
+        <button type="button" class="btn btn-primary" @onclick="@triggerSearch">Search</button>
+        <input type="text" class="form-control col-4" @bind="_filter.Query" placeholder="Search query" />
 
-        <!-- Second dropdown -->
-        <div class="input-group-append">
-            <select class="form-select">
-                <option selected>Option A</option>
-                <option value="B">Option B</option>
-                <option value="C">Option C</option>
+        <select class="form-select col-3" @bind="_filter.Category">
+            <option value="">Select Category</option>
+            @foreach (var category in _categories.CategoriesList)
+            {
+                <option value="@category">@category</option>
+            }
+        </select>
+        @if (showStatusOptions)
+        {
+            <select class="form-select col-3" @bind="_filter.Status">
+                <option value="">Select Status</option>
+                @foreach (var status in _status.StatusList)
+                {
+                    <option value="@status">@status</option>
+                }
             </select>
-        </div>
+        }
 
-        <!-- Third dropdown -->
-        <div class="input-group-append">
-            <select class="form-select">
-                <option selected>Option X</option>
-                <option value="Y">Option Y</option>
-                <option value="Z">Option Z</option>
-            </select>
-        </div>
+        <span class="input-group-text col-1">Min Price</span>
+        <input type="number" class="form-control col-1" @bind="_filter.MinPrice" placeholder="Minimum price" />
+        <span class="input-group-text col-1">Max Price</span>
+        <input type="number" class="form-control col-1" @bind="_filter.MaxPrice" placeholder="Max price" />
     </div>
 </div>
 
 
 
 @code {
+
     [Parameter]
-    public Filter Filter { get; set; } = new Filter();
+    public Filter _filter { get; set; }
 
     [Parameter]
     public bool showStatusOptions { get; set; }
 
-    
+    //Event to notify parent component of updated items
+    [Parameter]
+    public EventCallback<Filter> SearchRequested { get; set; }
+
+
+    private Categories _categories = new();
+    private Status _status = new();
+
+    //notify parent component that items have been updated
+    public async Task triggerSearch()
+    {
+
+        var newFilter = new Filter
+            {
+                Query = _filter.Query,
+                Category = _filter.Category,
+                Status = _filter.Status,
+                MinPrice = _filter.MinPrice,
+                MaxPrice = _filter.MaxPrice
+            };
+        await SearchRequested.InvokeAsync(newFilter);
+    }
 }

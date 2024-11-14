@@ -29,7 +29,7 @@
                     </EditForm>
 
                     <div class="text-center mt-3">
-                        <button class="btn btn-link">Don't have an account? Sign up</button>
+                        <button class="btn btn-link" @onclick="createAccount">Don't have an account? Sign up</button>
                     </div>
                 </div>
             </div>
@@ -69,6 +69,10 @@
             Console.WriteLine("Login failed");
         }
 
+    }
+    public void createAccount()
+    {
+        navManager.NavigateTo("createuser");
     }
 
 }
