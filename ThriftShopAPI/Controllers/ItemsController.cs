@@ -45,6 +45,7 @@ namespace ThriftShopAPI.Controllers
         public IActionResult AddItem(Item item)
         {
             _repository.addItem(item);
+            _userRepo.AddItemListing(item);
             return Ok();
         }
 

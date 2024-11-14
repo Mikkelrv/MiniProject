@@ -20,11 +20,12 @@ namespace ThriftShopAPI.Repositories
             _collection = _database.GetCollection<User>("Users");
         }
 
-        public async Task addItemListing(Item item)
+        public async Task AddItemListing(Item item)
         {
             var userFilter = Builders<User>.Filter.Eq("Email", item.SellerEmail);
-            User user = await _collection.Find(userFilter).FirstOrDefaultAsync();
-            
+            var updatePush = Builders<User>.Update.Push("Selling", item);
+
+            await _collection.UpdateOneAsync(userFilter, updatePush);
         }
 
         public async Task<User?> AddUser(User user)
