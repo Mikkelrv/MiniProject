@@ -47,7 +47,7 @@
     {
         var response = await Http.PostAsJsonAsync($"https://localhost:7077/api/items/queryfilter", _filter);
         if (response.IsSuccessStatusCode) {
-            _items = response.Content.ReadFromJsonAsync<List<Item>>().Result;
+            _items = response.Content.ReadFromJsonAsync<List<Item>>().Result!;
         }
     }
 

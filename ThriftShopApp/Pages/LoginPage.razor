@@ -43,7 +43,7 @@
     private EditContext? _editContext;
     private User? user = null;
     [Parameter]
-    public string target { get; set; }
+    public required string target { get; set; }
 
     protected override void OnInitialized()
     {
@@ -59,7 +59,7 @@
             user = await response.Content.ReadFromJsonAsync<User>();
             if (user != null)
             {
-                loginService.Login(user);
+                await loginService.Login(user);
                 navManager.NavigateTo(target);
             }
         }

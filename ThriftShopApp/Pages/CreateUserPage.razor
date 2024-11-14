@@ -22,7 +22,7 @@
         <InputText type="password" id="password" class="form-control" @bind-Value="user.Password" placeholder="Enter your password" />
     </div>
     <div class="col-12 mb-3">
-        <button type="submit" class="btn btn-primary">Submit</button> 
+        <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </EditForm>
 
@@ -35,19 +35,15 @@
         Email = "",
         Purchases = new List<Item>(),
         Selling = new List<Item>(),
-        Password = ""        
+        Password = ""
     };
-
-    protected override async Task OnInitializedAsync()
-    {
-    }
 
     private async Task HandleSubmit()
     {
         var response = await Http.PostAsJsonAsync("https://localhost:7077/api/User/add", user);
         if (response.IsSuccessStatusCode)
         {
-            user = await response.Content.ReadFromJsonAsync<User>();
+            user = await response.Content.ReadFromJsonAsync<User>() ?? null!;
             if (user != null)
             {
                 await login.Login(user);

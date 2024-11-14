@@ -46,17 +46,17 @@ namespace ThriftShopAPI.Repositories
                 filterList.Add(Builders<Item>.Filter.Lte(item => item.Price, maxPrice));
             }
 
-            if (!string.IsNullOrEmpty(category))
+            if (category != "")
             {
                 filterList.Add(Builders<Item>.Filter.Eq(item => item.Category, category));
             }
 
-            if (!string.IsNullOrEmpty(status))
+            if (status != "")
             {
                 filterList.Add(Builders<Item>.Filter.Eq(item => item.Status, status));
             }
 
-            if (!string.IsNullOrEmpty(query))
+            if (query != "")
             {
                 var queryFilter = Builders<Item>.Filter.Or(
                     Builders<Item>.Filter.Regex(item => item.Name, new BsonRegularExpression(query, "i")),

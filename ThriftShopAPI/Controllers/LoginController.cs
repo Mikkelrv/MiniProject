@@ -17,17 +17,17 @@ namespace ThriftShopAPI.Controllers
 
         public async Task<User> Login(UserAuthentication ua)
         {
-            
-            var user = await _userRepo.GetUser(ua.Email.ToLower());
+
+            var user = await _userRepo.GetUser(ua.Email!.ToLower());
             if (user == null)
             {
-                return null;
+                return null!;
             }
             if (user.Password == ua.Password)
             {
                 return user;
             }
-            return null;
+            return null!;
         }
     }
 }
