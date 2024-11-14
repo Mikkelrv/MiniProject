@@ -26,7 +26,7 @@ namespace ThriftShopApp.Services
 
         public class ImgurResponse
         {
-            public string Url { get; set; }
+            public required string Url { get; set; }
         }
     }
 }

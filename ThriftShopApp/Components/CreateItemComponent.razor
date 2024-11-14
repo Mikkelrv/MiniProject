@@ -58,7 +58,7 @@
 
     private async Task HandleSubmit()
     {
-        item.SellerEmail = user.Email;
+        item.SellerEmail = user!.Email;
         var response = await Http.PostAsJsonAsync("https://localhost:7077/api/items/add", item);
     }
 }

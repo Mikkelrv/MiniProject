@@ -1,5 +1,5 @@
 ﻿@using ThriftShopCore.Models
-@inject IJSRuntime JS // Optional, to control scroll locking when modal is open 
+@inject IJSRuntime JS // Optional, to control scroll locking when modal is open
 
 <div class="card shadow-lg" style="width: 18rem;" @onclick="ShowDetail">
     <!-- Image at the top -->
@@ -76,11 +76,11 @@
 
 @code {
     [Parameter]
-    public Item _item { get; set; }
+    public required Item _item { get; set; }
 
     private bool showModal = false;
 
-    
+
 
     private void ShowDetail()
     {

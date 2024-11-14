@@ -39,11 +39,11 @@
     // Add these classes if you haven't already
     public class ImgurResponse
     {
-        public ImgurData Data { get; set; }
+        public required ImgurData Data { get; set; }
     }
 
     public class ImgurData
     {
-        public string Link { get; set; }
+        public required string Link { get; set; }
     }
 }
