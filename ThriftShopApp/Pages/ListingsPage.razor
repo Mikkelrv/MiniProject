@@ -4,16 +4,29 @@
 @inject ILoginService loginService
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
-@if (_filter is not null)
-{
-    <SearchComponent _filter="@_filter" SearchRequested="OnSearchRequested"></SearchComponent>
-}
-@if (_items.Count() > 0 && _items is not null)
-{
-    <DisplayAllItemsComponent items="@_items" />
-}
+<div class="container mt-4">
+    @if (_filter is not null)
+    {
+        <div class="mb-3">
+            <SearchComponent _filter="@_filter" SearchRequested="OnSearchRequested"></SearchComponent>
+        </div>
+    }
 
-
+    @if (_items.Count() > 0 && _items is not null)
+    {
+        <div class="row">
+            <div class="col">
+                <DisplayAllItemsComponent items="@_items" />
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info mt-3" role="alert">
+            Loading...
+        </div>
+    }
+</div>
 
 @code {
 
