@@ -8,7 +8,7 @@ namespace ThriftShopAPI.Repositories
         Task<User?> AddUser(User user);
         void UpdateUser(User user);
         void DeleteUser(string email);
-        void addItemListing(Item item);
+        Task addItemListing(Item item);
 
     }
 }
