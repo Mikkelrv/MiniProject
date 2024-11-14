@@ -46,6 +46,23 @@ namespace ThriftShopAPI.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [Route("queryfilter")]
+        public async Task<IEnumerable<Item>> getItemsByFilter(Filter filter)
+        {
+            var items = await _repository.getItems(filter.MaxPrice, filter.MinPrice, filter.Category, filter.Query, filter.Status);
+            if (items == null)
+            {
+                throw new Exception("List is null");
+            }
+            if (items.Count() == 0)
+            {
+                throw new Exception("List is empty");
+            }
+
+            return items;
+        }
+
         [HttpPut]
         [Route("update")]
         public IActionResult UpdateItem(string id, Item item)

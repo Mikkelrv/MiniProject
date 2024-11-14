@@ -30,7 +30,7 @@
                     </EditForm>
 
                     <div class="text-center mt-3">
-                        <button class="btn btn-link">Don't have an account? Sign up</button>
+                        <button class="btn btn-link" @onclick="createAccount">Don't have an account? Sign up</button>
                     </div>
                 </div>
             </div>
@@ -72,6 +72,7 @@
 
     }
 
+<<<<<<< HEAD
     private async Task Bypass()
     {
         var img = "https://media.discordapp.net/attachments/1096887979903045674/1306282399507677286/mqdefault.png?ex=673619c9&is=6734c849&hm=c80dabc09a8fb4e241a6e98101fbbf9ee7770a6be0904d7bb6317edfe695ca34&=&format=webp&quality=lossless&width=267&height=150";
@@ -138,6 +139,11 @@
         loginService.Login(adminUser);
         navManager.NavigateTo(target);
         
+=======
+    public void createAccount()
+    {
+        navManager.NavigateTo("createuser");
+>>>>>>> master
     }
 
 }
