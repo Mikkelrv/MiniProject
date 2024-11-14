@@ -5,7 +5,7 @@
 @inject ILoginService login
 
 <h1 class="mb-3 mt-3">Create new user</h1>
-
+<p style="color:red; display:@(emailNotAvailable? "block" : "none" )"> Email not available </p>
 <EditForm Model="@user" OnSubmit="@HandleSubmit" class="row p-3">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -29,8 +29,7 @@
 
 
 @code {
-
-
+    private bool emailNotAvailable = false;
     private User user = new User {
         Name = "",
         Email = "",
@@ -51,13 +50,21 @@
             user = await response.Content.ReadFromJsonAsync<User>();
             if (user != null)
             {
-                login.Login(user);
+                await login.Login(user);
                 navManager.NavigateTo("myprofile");
             }
         }
         else
         {
-            // Handle login failure (e.g., show error message)
+            user = new User
+                {
+                    Name = "",
+                    Email = "",
+                    Purchases = new List<Item>(),
+                    Selling = new List<Item>(),
+                    Password = ""
+                };
+
             Console.WriteLine("Login failed");
         }
     }

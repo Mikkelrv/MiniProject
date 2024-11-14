@@ -1,0 +1,14 @@
+﻿@page "/logout"
+@inject ILoginService login
+@inject NavigationManager navManager
+@inject ILocalStorageService store
+<h3>Loging out</h3>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await store.RemoveItemAsync("user");
+        await login.Logout();
+        navManager.NavigateTo("login/myprofile");
+    }
+}

@@ -17,7 +17,5 @@
         _user = await loginService.GetUserLoggedIn();
         if (_user is null)
             navManager.NavigateTo("login/listings");
-
-		_items = await Http.GetFromJsonAsync<List<Item>>($"https://localhost:7077/api/items/get/all?filter={_filter}");
     }
 }

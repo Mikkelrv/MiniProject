@@ -11,9 +11,9 @@ namespace ThriftShopApp.Services
 
         // If user is valid the function will return true and the
         // user is set to be logged in.
-        void Login(User user);
+        Task Login(User user);
 
-        void Logout();
+        Task Logout();
     }
 }
 

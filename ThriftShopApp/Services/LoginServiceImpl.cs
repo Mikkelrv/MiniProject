@@ -18,14 +18,14 @@ namespace ThriftShopApp.Services
             return res;
         }
 
-        public void Login(User user)
+        public async Task Login(User user)
         {
-            localStorage.SetItemAsync("user", user);
+            await localStorage.SetItemAsync("user", user);
         }
 
-        public void Logout()
+        public async Task Logout()
         {
-            localStorage.RemoveItemAsync("user");
+            await localStorage.ClearAsync();
         }
     }
 }
