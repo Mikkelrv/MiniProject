@@ -39,7 +39,6 @@
         _user = await loginService.GetUserLoggedIn();
         if (_user is null)
             navManager.NavigateTo("login/listings");
-
         await FetchItems();
     }
 

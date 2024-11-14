@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThriftShopApp", "ThriftShopApp\ThriftShopApp.csproj", "{355983B4-49D4-4348-9F8B-77B70305F70C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C6C04260-E56C-4ED2-8F09-C86D2AA068A4} = {C6C04260-E56C-4ED2-8F09-C86D2AA068A4}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThriftShopAPI", "ThriftShopAPI\ThriftShopAPI.csproj", "{C6C04260-E56C-4ED2-8F09-C86D2AA068A4}"
 EndProject
