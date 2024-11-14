@@ -2,15 +2,24 @@
 @inject HttpClient Http
 @inject NavigationManager navManager
 @inject ILoginService loginService
-<SearchComponent></SearchComponent>
-<DisplayAllItemsComponent items="@_items"/>
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+@if (_filter is not null)
+{
+    <SearchComponent _filter="@_filter" SearchRequested="OnSearchRequested"></SearchComponent>
+}
+@if (_items.Count() > 0 && _items is not null)
+{
+    <DisplayAllItemsComponent items="@_items" />
+}
+
 
 
 @code {
 
-	private User? _user;
-	private List<Item> _items = new();
-	private Filter _filter;
+    private User? _user;
+    private List<Item> _items = new();
+    private Filter _filter = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -18,6 +27,22 @@
         if (_user is null)
             navManager.NavigateTo("login/listings");
 
-		_items = await Http.GetFromJsonAsync<List<Item>>($"https://localhost:7077/api/items/get/all?filter={_filter}");
+        await FetchItems();
     }
+
+    private async Task FetchItems()
+    {
+        var response = await Http.PostAsJsonAsync($"https://localhost:7077/api/items/queryfilter", _filter);
+        if (response.IsSuccessStatusCode) {
+            _items = response.Content.ReadFromJsonAsync<List<Item>>().Result;
+        }
+    }
+
+    private async Task OnSearchRequested(Filter filter)
+    {
+        _filter = filter;
+        await FetchItems();
+        StateHasChanged();
+    }
+
 }
