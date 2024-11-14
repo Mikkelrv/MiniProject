@@ -2,8 +2,9 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject NavigationManager navManager
 @inject HttpClient Http
+@inject ILoginService login
 
-<h1 class="mb-3 mt-3">Add Product</h1>
+<h1 class="mb-3 mt-3">Create new user</h1>
 
 <EditForm Model="@user" OnSubmit="@HandleSubmit" class="row p-3">
     <DataAnnotationsValidator />
@@ -44,6 +45,20 @@
 
     private async Task HandleSubmit()
     {
-        var response = await Http.PostAsJsonAsync("https://localhost:7077/api/Login", user);
+        var response = await Http.PostAsJsonAsync("https://localhost:7077/api/User/add", user);
+        if (response.IsSuccessStatusCode)
+        {
+            user = await response.Content.ReadFromJsonAsync<User>();
+            if (user != null)
+            {
+                login.Login(user);
+                navManager.NavigateTo("myprofile");
+            }
+        }
+        else
+        {
+            // Handle login failure (e.g., show error message)
+            Console.WriteLine("Login failed");
+        }
     }
 }

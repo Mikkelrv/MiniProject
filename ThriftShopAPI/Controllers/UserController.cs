@@ -44,10 +44,10 @@ namespace ThriftShopAPI.Controllers
         }
         [HttpPost]
         [Route("add")]
-        public IActionResult AddUser(User user)
+        public async Task<IActionResult> AddUser(User user)
         {
-            _userRepo.AddUser(user);
-            return Ok();
+            User? response = await _userRepo.AddUser(user);
+            return Ok(response);
         }
 
     }
