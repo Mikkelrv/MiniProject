@@ -32,8 +32,10 @@
 
     private async Task FetchItems()
     {
-        var response = await Http.GetFromJsonAsync<List<Item>>($"https://localhost:7077/api/items/get/all?filter={_filter}");
-        if (response is not null) _items = new List<Item>(response);
+        var response = await Http.PostAsJsonAsync($"https://localhost:7077/api/items/queryfilter", _filter);
+        if (response.IsSuccessStatusCode) {
+            _items = response.Content.ReadFromJsonAsync<List<Item>>().Result;
+        }
     }
 
     private async Task OnSearchRequested(Filter filter)
