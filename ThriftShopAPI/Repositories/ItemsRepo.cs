@@ -77,5 +77,10 @@ namespace ThriftShopAPI.Repositories
             var filter = Builders<Item>.Filter.Eq(i => i._id, item._id);
             _collection.ReplaceOne(filter, item);
         }
+
+        public async Task updateStatus(Item item) {
+            var userFilter = Builders<Item>.Filter.Eq("_id", item._id);
+            var updatePush = Builders<User>.Update.Push("Status", item.Status);
+        }
     }
 }

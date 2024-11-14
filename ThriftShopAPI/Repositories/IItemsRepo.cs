@@ -9,5 +9,6 @@ namespace ThriftShopAPI.Repositories
         void deleteItem(string id);
         Task<IEnumerable<Item>> getItems(int maxPrice, int minPrice, string category, string query, string status);
         void updateItem(Item item);
+        Task updateStatus(Item item);
     }
 }

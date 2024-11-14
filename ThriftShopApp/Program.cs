@@ -20,5 +20,6 @@ builder.Services.AddScoped<IImgurService>(sp =>
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<ILoginService, LoginServiceImpl>();
+builder.Services.AddScoped<IItemHandlersService, ItemHandlerService>();
 
 await builder.Build().RunAsync();

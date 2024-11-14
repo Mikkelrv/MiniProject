@@ -74,5 +74,13 @@ namespace ThriftShopAPI.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        [Route("update/itemlisting")]
+        public async Task<IActionResult> UpdateItemListing(Item item) {
+            await _repository.updateStatus(item);
+            await _userRepo.updateItemListing(item);
+            return Ok();
+        } 
+
     }
 }
