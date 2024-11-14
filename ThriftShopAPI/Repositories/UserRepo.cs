@@ -19,6 +19,14 @@ namespace ThriftShopAPI.Repositories
             _database = _mongoClient.GetDatabase("ThriftShop");
             _collection = _database.GetCollection<User>("Users");
         }
+
+        public async Task addItemListing(Item item)
+        {
+            var userFilter = Builders<User>.Filter.Eq("Email", item.SellerEmail);
+            User user = await _collection.Find(userFilter).FirstOrDefaultAsync();
+            
+        }
+
         public async Task<User?> AddUser(User user)
         {
             User? response = await _collection.Find(Builders<User>.Filter.Eq("Email", user.Email)).FirstOrDefaultAsync();

@@ -10,10 +10,12 @@ namespace ThriftShopAPI.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly IItemsRepo _repository;
+        private readonly IUserRepo _userRepo;
 
-        public ItemsController(IItemsRepo repository)
+        public ItemsController(IItemsRepo repository, IUserRepo userRepo)
         {
             _repository = repository;
+            _userRepo = userRepo;
         }
 
         [HttpGet]
