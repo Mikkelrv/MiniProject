@@ -40,8 +40,9 @@
 @code {
     public User? user { get; set; }
     public Categories categories = new();
-    public Item item = new Item
-        {
+    [Parameter]
+    public Item item { get; set; } = new()
+    {
             Name = "name",
             Price = 10,
             Description = "write description",
