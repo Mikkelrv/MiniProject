@@ -46,7 +46,7 @@ namespace ThriftShopAPI.Controllers
         {
             _repository.addItem(item);
             _userRepo.AddItemListing(item);
-            return Ok();
+            return Ok(item);
         }
 
         [HttpPost]
@@ -62,15 +62,16 @@ namespace ThriftShopAPI.Controllers
         public IActionResult UpdateItem(string id, Item item)
         {
             _repository.updateItem(item);
-            return Ok();
+            return Ok(item);
         }
 
         [HttpPut]
-        [Route("update/itemlisting")]
+        [Route("update/itemstatus")]
         public async Task<IActionResult> UpdateItemListing(Item item) {
+            Console.WriteLine("I was called");
             await _repository.updateStatus(item);
             await _userRepo.updateItemListing(item);
-            return Ok();
+            return Ok(item);
         }
 
         [HttpPut]

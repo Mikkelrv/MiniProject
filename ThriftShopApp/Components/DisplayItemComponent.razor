@@ -1,5 +1,6 @@
 ﻿@using ThriftShopCore.Models
-@inject IJSRuntime JS // Optional, to control scroll locking when modal is open 
+@inject IJSRuntime JS // Optional, to control scroll locking when modal is open
+@inject IItemHandlersService itemHandler
 
 <div class="card shadow-lg" style="width: 18rem;" @onclick="ShowDetail">
     <!-- Image at the top -->
@@ -95,10 +96,11 @@
         StateHasChanged();
     }
 
-    public void addToBasket(Item item)
+    public async Task addToBasket(Item item)
     {
         Basket.Add(item);
         item.Status = "Reserved";
+        User user = await itemHandler.updateItemStatus(item);
         showModal = false;
     }
 }
