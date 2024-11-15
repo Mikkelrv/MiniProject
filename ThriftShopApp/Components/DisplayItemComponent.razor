@@ -5,147 +5,164 @@
 
 
 
+
 <div class="card shadow-lg bg-dark text-light m-2" style="width: 18rem;" @onclick="ShowDetail">
-    <img src="@_item.ImageUrl" class="card-img-top img-thumbnail" alt="@_item.Name" style="width: 100%; height: 200px; object-fit: cover;">
-    <div class="card-body">
-        <h5 class="card-title mb-1">@_item.Name</h5>
-        <p class="card-text mb-1 text-muted">$@_item.Price.ToString("F2")</p>
-    </div>
+	<img src="@_item.ImageUrl" class="card-img-top img-thumbnail" alt="@_item.Name" style="width: 100%; height: 200px; object-fit: cover;">
+	<div class="card-body">
+		<h5 class="card-title mb-1">@_item.Name</h5>
+		<p class="card-text mb-1 text-muted">$@_item.Price.ToString("F2")</p>
+	</div>
 </div>
 
-@if (showModal)
+@if (showModal && _item != null)
 {
-    <div class="modal-overlay" @onclick="CloseDetail">
-        <div class="item-detail-modal card shadow bg-dark text-light" @onclick:stopPropagation="true">
-            <img src="@_item.ImageUrl" class="card-img-top img-thumbnail" alt="@_item.Name"
-                 style="width: 100%; height: 200px; object-fit: cover;" @onclick="ShowFullImage">
+	<div class="modal-overlay" @onclick="CloseDetail">
+		<div class="item-detail-modal card shadow bg-dark text-light" @onclick:stopPropagation="true">
+			<img src="@_item.ImageUrl" class="card-img-top img-thumbnail" alt="@_item.Name"
+				 style="width: 100%; height: 200px; object-fit: cover;" @onclick="ShowFullImage">
 
-            <div class="card-body">
-                <button type="button" class="btn-close btn-close-white float-end" aria-label="Close" @onclick="CloseDetail"></button>
-                <h5 class="card-title">@_item.Name</h5>
-                <h6 class="card-subtitle mb-2 text-muted">@_item.Category</h6>
+			<div class="card-body">
+				<button type="button" class="btn-close btn-close-white float-end" aria-label="Close" @onclick="CloseDetail"></button>
+				<h5 class="card-title">@_item.Name</h5>
+				<h6 class="card-subtitle mb-2 text-muted">@_item.Category</h6>
 
-                <p class="card-text"><strong>Price:</strong> $@_item.Price.ToString("F2")</p>
-                <p class="card-text">
-                    <strong>Description:</strong> @shortDescription
-                    @if (_item.Description.Length > 100)
-                    {
-                        <a href="javascript:void(0);" @onclick="ToggleReadMore">@readMoreText</a>
-                    }
-                </p>
-                <p class="card-text"><strong>Status:</strong> <span class="badge bg-success">@_item.Status</span></p>
-                <p class="card-text"><strong>Seller:</strong> <a href="mailto:@_item.SellerEmail">@_item.SellerEmail</a></p>
-                <p class="card-text"><strong>Listed On:</strong> @_item.Listed.ToString("MMMM dd, yyyy")</p>
-                @if (ShowAddToBasket)
-                {
-                    <button class="btn btn-primary" @onclick="()=>addToBasket(_item)">Add to basket</button>
-                }
-                   
-            </div>
-        </div>
-    </div>
+				<p class="card-text"><strong>Price:</strong> $@_item.Price.ToString("F2")</p>
+				<p class="card-text">
+					<strong>Description:</strong> @shortDescription
+					@if (_item.Description.Length > 100)
+					{
+						<a href="javascript:void(0);" @onclick="ToggleReadMore">@readMoreText</a>
+					}
+				</p>
+				<p class="card-text"><strong>Status:</strong> <span class="badge bg-success">@_item.Status</span></p>
+				<p class="card-text"><strong>Seller:</strong> <a href="mailto:@_item.SellerEmail">@_item.SellerEmail</a></p>
+				<p class="card-text"><strong>Listed On:</strong> @_item.Listed.ToString("MMMM dd, yyyy")</p>
+				@if (!isToggleShownButton)
+				{
+					<button class="btn btn-primary" @onclick="()=>addToBasket(_item)">Add to basket</button>
+				}
+				else
+				{
+					<button class="btn btn-primary" @onclick="toggleEditComponent">Edit</button>
+					if (_isShowEditComponent)
+					{
+						<CreateItemComponent item="@_item" />
+					}
+				}
+			</div>
+		</div>
+	</div>
 }
 
 @if (showFullImage)
 {
-    <div class="modal-overlay" @onclick="CloseFullImage">
-        <img src="@_item.ImageUrl" alt="@_item.Name" class="full-image-modal" @onclick:stopPropagation="true" />
-    </div>
+	<div class="modal-overlay" @onclick="CloseFullImage">
+		<img src="@_item.ImageUrl" alt="@_item.Name" class="full-image-modal" @onclick:stopPropagation="true" />
+	</div>
 }
 
 <style>
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
+	.modal-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 1000;
+	}
 
-    .item-detail-modal {
-        position: relative;
-        max-width: 500px;
-        width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-        background: #333;
-        border-radius: 8px;
-        padding: 20px;
-        z-index: 1001;
-    }
+	.item-detail-modal {
+		position: relative;
+		max-width: 500px;
+		width: 90%;
+		max-height: 80vh;
+		overflow-y: auto;
+		background: #333;
+		border-radius: 8px;
+		padding: 20px;
+		z-index: 1001;
+	}
 
-    .full-image-modal {
-        max-width: 90%;
-        max-height: 90%;
-        border-radius: 8px;
-        z-index: 1002;
-    }
+	.full-image-modal {
+		max-width: 90%;
+		max-height: 90%;
+		border-radius: 8px;
+		z-index: 1002;
+	}
 
-    body.modal-open {
-        overflow: hidden;
-    }
+	body.modal-open {
+		overflow: hidden;
+	}
 </style>
 
 @code {
-    [Parameter]
-    public Item _item { get; set; }
+	[Parameter]
+	public Item _item { get; set; }
 
-    [Parameter]
-    public List<Item> Basket { get; set; }
+	[Parameter]
+	public List<Item> Basket { get; set; }
 
-    [Parameter]
-    public bool ShowAddToBasket { get; set; } = true;
+	[Parameter]
+	public User User { get; set; }
 
-    private bool showModal = false;
-    private bool showFullImage = false;
-    private bool showMore = false;
-    private string readMoreText => showMore ? "Show Less" : "Read More";
-    private string shortDescription => showMore || _item.Description.Length <= 100
-        ? _item.Description
-        : _item.Description.Substring(0, 100) + "...";
+	[Parameter]
+	public bool isToggleShownButton { get; set; } = false;
 
-    private void ShowDetail()
-    {
-        showModal = true;
-        JS.InvokeVoidAsync("document.body.classList.add", "modal-open");
-    }
+	private bool _isShowEditComponent = false;
 
-    private void CloseDetail()
-    {
-        showModal = false;
-        JS.InvokeVoidAsync("document.body.classList.remove", "modal-open");
-    }
+	private bool showModal = false;
+	private bool showFullImage = false;
+	private bool showMore = false;
+	private string readMoreText => showMore ? "Show Less" : "Read More";
+	private string shortDescription => showMore || _item.Description.Length <= 100
+		? _item.Description
+		: _item.Description.Substring(0, 100) + "...";
 
-    private void ToggleReadMore()
-    {
-        showMore = !showMore;
-    }
+	private void ShowDetail()
+	{
+		showModal = true;
+		JS.InvokeVoidAsync("document.body.classList.add", "modal-open");
+	}
 
-    private void ShowFullImage()
-    {
-        showFullImage = true;
-    }
+	private void CloseDetail()
+	{
+		showModal = false;
+		JS.InvokeVoidAsync("document.body.classList.remove", "modal-open");
+	}
 
-    private void CloseFullImage()
-    {
-        showFullImage = false;
-    }
+	private void ToggleReadMore()
+	{
+		showMore = !showMore;
+	}
 
-    public async Task addToBasket(Item item)
-    {
-        if (!Basket.Contains(item))
-        {
-            Basket.Add(item);
-            item.Status = "Reserved";
-            User user = await itemHandler.updateItemStatus(item);
-            showModal = false;
-        }
-        CloseDetail();
+	private void ShowFullImage()
+	{
+		showFullImage = true;
+	}
 
-    }
+	private void CloseFullImage()
+	{
+		showFullImage = false;
+	}
+
+	public async Task addToBasket(Item item)
+	{
+		if (!Basket.Contains(item))
+		{
+			Basket.Add(item);
+			item.Status = "Reserved";
+			User user = await itemHandler.updateItemStatus(item);
+			showModal = false;
+		}
+		CloseDetail();
+	}
+
+	public void toggleEditComponent()
+	{
+		_isShowEditComponent = true;
+	}
 }
