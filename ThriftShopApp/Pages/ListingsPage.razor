@@ -17,7 +17,7 @@
     {
         <div class="row">
             <div class="col">
-                <DisplayAllItemsComponent items="@_items" />
+                <DisplayAllItemsComponent items="@_items" Basket="@_basket" />
             </div>
         </div>
     }
@@ -34,6 +34,7 @@
     private User? _user;
     private List<Item> _items = new();
     private Filter _filter = new();
+    private List<Item> _basket = new();
 
     protected override async Task OnInitializedAsync()
     {

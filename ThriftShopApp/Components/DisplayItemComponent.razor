@@ -9,7 +9,6 @@
     <div class="card-body">
         <h5 class="card-title mb-1">@_item.Name</h5>
         <p class="card-text mb-1 text-muted">$@_item.Price.ToString("F2")</p>
-        <p class="card-text text-muted">@_item.Category</p>
     </div>
 </div>
 
@@ -31,9 +30,7 @@
                 <p class="card-text"><strong>Status:</strong> <span class="badge bg-success">@_item.Status</span></p>
                 <p class="card-text"><strong>Seller:</strong> <a href="mailto:@_item.SellerEmail">@_item.SellerEmail</a></p>
                 <p class="card-text"><strong>Listed On:</strong> @_item.Listed.ToString("MMMM dd, yyyy")</p>
-                <button class="btn btn-primary" @onclick="()=>reserveItem(_item)">Reserve Item</button>
-
-                <a href="#" class="btn btn-primary mt-3">Contact Seller</a>
+                <button class="btn btn-primary" @onclick="()=>addToBasket(_item)">Add to basket</button>
             </div>
         </div>
     </div>
@@ -78,6 +75,9 @@
     [Parameter]
     public Item _item { get; set; }
 
+    [Parameter]
+    public List<Item> Basket { get; set; }
+
     private bool showModal = false;
 
     
@@ -95,9 +95,9 @@
         StateHasChanged();
     }
 
-    public void reserveItem(Item item)
+    public void addToBasket(Item item)
 	{
+        Basket.Add(item);
 		item.Status = "Reserved";
-        StateHasChanged();
 	}
 }
