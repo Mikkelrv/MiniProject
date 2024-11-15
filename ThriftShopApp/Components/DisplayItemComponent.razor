@@ -97,8 +97,11 @@
 
     public void addToBasket(Item item)
     {
-        Basket.Add(item);
-        item.Status = "Reserved";
-        showModal = false;
+        if (!Basket.Contains(item))
+        {
+            Basket.Add(item);
+            showModal = false;
+        }
+
     }
 }
