@@ -36,7 +36,11 @@
                 <p class="card-text"><strong>Status:</strong> <span class="badge bg-success">@_item.Status</span></p>
                 <p class="card-text"><strong>Seller:</strong> <a href="mailto:@_item.SellerEmail">@_item.SellerEmail</a></p>
                 <p class="card-text"><strong>Listed On:</strong> @_item.Listed.ToString("MMMM dd, yyyy")</p>
-                <button class="btn btn-primary" @onclick="()=>addToBasket(_item)">Add to basket</button>
+                @if (ShowAddToBasket)
+                {
+                    <button class="btn btn-primary" @onclick="()=>addToBasket(_item)">Add to basket</button>
+                }
+                   
             </div>
         </div>
     </div>
@@ -93,6 +97,9 @@
 
     [Parameter]
     public List<Item> Basket { get; set; }
+
+    [Parameter]
+    public bool ShowAddToBasket { get; set; } = true;
 
     private bool showModal = false;
     private bool showFullImage = false;

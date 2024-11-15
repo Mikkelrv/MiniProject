@@ -2,7 +2,7 @@
     @foreach (var item in items)
     {
         <div class="item-wrapper">
-            <DisplayItemComponent _item="@item" Basket="@Basket" />
+            <DisplayItemComponent _item="@item" Basket="@Basket" ShowAddToBasket="ShowAddToBasket" />
         </div>
     }
 </div>
@@ -46,4 +46,7 @@
 
     [Parameter]
     public List<Item> Basket { get; set; }
+
+    [Parameter]
+    public bool ShowAddToBasket { get; set; } = true;
 }
