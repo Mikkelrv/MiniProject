@@ -70,7 +70,14 @@ namespace ThriftShopAPI.Repositories
             var update = Builders<User>.Update.Set("Selling.$", item);
 
             await _collection.UpdateOneAsync(combinedFilter, update);
+        }
 
+        public async Task AddItemPurchase(Item item)
+        {
+            var userFilter = Builders<User>.Filter.Eq("Email", item.SellerEmail);
+            var updatePush = Builders<User>.Update.Push("Selling", item);
+
+            await _collection.UpdateOneAsync(userFilter, updatePush);
         }
     }
 }
