@@ -1,0 +1,9 @@
+@page "/"
+@inject NavigationManager navManager
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        navManager.NavigateTo("listings");
+    }
+}
