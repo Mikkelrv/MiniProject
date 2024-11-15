@@ -1,6 +1,8 @@
-﻿@using ThriftShopCore.Models
+@using ThriftShopCore.Models
 @inject IJSRuntime JS
 <link href="~/css/DisplayItemComponent.css" rel="stylesheet" />
+@inject IItemHandlersService itemHandler
+
 
 
 <div class="card shadow-lg bg-dark text-light m-2" style="width: 18rem;" @onclick="ShowDetail">
@@ -127,11 +129,13 @@
         showFullImage = false;
     }
 
-    public void addToBasket(Item item)
+    public async Task addToBasket(Item item)
     {
         if (!Basket.Contains(item))
         {
             Basket.Add(item);
+            item.Status = "Reserved";
+            User user = await itemHandler.updateItemStatus(item);
             showModal = false;
         }
 
