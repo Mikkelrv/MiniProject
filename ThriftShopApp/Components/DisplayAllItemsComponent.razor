@@ -2,13 +2,17 @@
 	@foreach (var item in items)
 	{
 		<div class="col">
-			<DisplayItemComponent _item="@item" />
+			<DisplayItemComponent _item="@item" Basket="@Basket"/>
 		</div>
 	}
 </div>
 
 @code {
 	[Parameter]
-	public required List<Item> items { get; set; }
+	public List<Item> items { get; set; }
+
+	[Parameter]
+	public List<Item> Basket { get; set; }
 
 }
+

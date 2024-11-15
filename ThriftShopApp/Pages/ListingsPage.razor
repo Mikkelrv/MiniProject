@@ -4,6 +4,18 @@
 @inject ILoginService loginService
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
+<style>
+    .basket-container {
+        position: fixed;
+        top: 10px;
+        right: 20px;
+        z-index: 1000;
+    }
+</style>
+
+<div class="basket-container">
+    <BasketComponent Basket="@_basket" />
+</div>
 
 <div class="container mt-4">
     @if (_filter is not null)
@@ -17,7 +29,7 @@
     {
         <div class="row">
             <div class="col">
-                <DisplayAllItemsComponent items="@_items" />
+                <DisplayAllItemsComponent items="@_items" Basket="@_basket" />
             </div>
         </div>
     }
@@ -34,6 +46,7 @@
     private User? _user;
     private List<Item> _items = new();
     private Filter _filter = new();
+    private List<Item> _basket = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -46,8 +59,9 @@
     private async Task FetchItems()
     {
         var response = await Http.PostAsJsonAsync($"https://localhost:7077/api/items/queryfilter", _filter);
-        if (response.IsSuccessStatusCode) {
-            _items = response.Content.ReadFromJsonAsync<List<Item>>().Result!;
+        if (response.IsSuccessStatusCode)
+        {
+            _items = response.Content.ReadFromJsonAsync<List<Item>>().Result;
         }
     }
 
