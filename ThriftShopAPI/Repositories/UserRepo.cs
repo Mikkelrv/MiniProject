@@ -61,5 +61,23 @@ namespace ThriftShopAPI.Repositories
 
             _collection.UpdateOne(filter, update);
         }
+
+        public async Task updateItemListing(Item item) {
+            var userFilter = Builders<User>.Filter.Eq("Email", item.SellerEmail);
+            var arrayFilter = Builders<User>.Filter.Eq("Selling._id", item._id);
+            var combinedFilter = Builders<User>.Filter.And(userFilter, arrayFilter);
+
+            var update = Builders<User>.Update.Set("Selling.$", item);
+
+            await _collection.UpdateOneAsync(combinedFilter, update);
+        }
+
+        public async Task addItemPurchase(Item item)
+        {
+            var userFilter = Builders<User>.Filter.Eq("Email", item.BuyerEmail);
+            var updatePush = Builders<User>.Update.Push("Purchsed", item);
+
+            await _collection.UpdateOneAsync(userFilter, updatePush);
+        }
     }
 }
