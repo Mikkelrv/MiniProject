@@ -1,12 +1,12 @@
 ﻿<div class="position-relative">
     <div class="btn btn-primary dropdown-toggle" @onclick="ToggleBasket" aria-expanded="@_showBasket">
-        Basket <span class="badge text-bg-secondary">@Basket?.Count()</span>
+        Basket
     </div>
 
     @if (_showBasket)
     {
-        <div class="dropdown-menu show p-3 bg-light shadow" style=" width: 300px; position: absolute; top: 100%; right: 0; left: auto; z-index: 1050; width: 300px;">
-            <!-- Adjusted the dropdown-menu width -->
+        <div class="dropdown-menu show p-3 bg-light shadow"
+             style="position: absolute; top: 100%; right: 0; z-index: 1050; max-height: 300px; overflow-y: auto; width: 300px;">
             @if (Basket != null && Basket.Any())
             {
                 @foreach (var item in Basket)
@@ -26,25 +26,9 @@
     }
 </div>
 
-<style>
-    .item-div {
-        width: 100%; /* Ensure it spans the full width of the dropdown */
-        max-width: 100%; /* Avoid unintended overflow */
-        padding: 10px; /* Optional: Add padding for a better visual appearance */
-        border: 1px solid #ddd; /* Optional: Add a border for differentiation */
-        border-radius: 4px; /* Optional: Smooth corners */
-        background-color: #f9f9f9; /* Optional: Background color */
-    }
-
-    .dropdown-menu {
-        width: 300px; /* Set the width of the dropdown menu */
-        max-width: 100%; /* Ensure it doesn't overflow its container */
-    }
-</style>
-
 @code {
     [Parameter]
-    public List<Item> Basket { get; set; }
+    public List<Item> Basket { get; set; } = new();
 
     private bool _showBasket = false;
 
