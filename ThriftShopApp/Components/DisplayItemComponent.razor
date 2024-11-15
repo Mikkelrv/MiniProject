@@ -80,7 +80,7 @@
 
     private bool showModal = false;
 
-    
+
 
     private void ShowDetail()
     {
@@ -96,8 +96,9 @@
     }
 
     public void addToBasket(Item item)
-	{
+    {
         Basket.Add(item);
-		item.Status = "Reserved";
-	}
+        item.Status = "Reserved";
+        showModal = false;
+    }
 }
