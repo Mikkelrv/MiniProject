@@ -3,7 +3,7 @@
 @inject HttpClient Http
 @inject IItemHandlersService itemHandler
 
-<h3>CreateItemComponent</h3>
+<h3>@(item._id==null?"Create" : "Update") a listing for an item</h3>
 <EditForm Model="@item" OnSubmit="@HandleSubmit" class="row p-3">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -33,7 +33,7 @@
         <InputText id="img" class="form-control" @bind-Value="item.ImageUrl" placeholder="ImageURL" />
     </div>
     <div class="col-12 mb-3">
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">@(item._id == null ? "Submit" : "Update")</button>
     </div>
 </EditForm>
 
@@ -60,6 +60,13 @@
     private async Task HandleSubmit()
     {
         item.SellerEmail = user.Email;
-        itemHandler.createItem(item);
+        if (item._id == null)
+        {
+            user = await itemHandler.createItem(item);
+        }
+        else
+        {
+            user = await itemHandler.updateItem(item);
+        }
     }
 }
