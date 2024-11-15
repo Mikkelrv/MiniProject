@@ -50,7 +50,7 @@ namespace ThriftShopApp.Services
 
         public async Task<User> purchaseItem(List<Item> items)
         {
-            var response = await http.PostAsJsonAsync("https://localhost:7077/api/items/update/itemlisting", items);
+            var response = await http.PostAsJsonAsync("https://localhost:7077/api/items/update/purchase", items);
             User? user = null;
             if (response.IsSuccessStatusCode)
             {
@@ -67,7 +67,20 @@ namespace ThriftShopApp.Services
 
         public async Task<User> updateItem(Item item)
         {
-            throw new NotImplementedException();
+            var response = await http.PostAsJsonAsync("https://localhost:7077/api/items/update", item);
+            User? user = null;
+            if (response.IsSuccessStatusCode)
+            {
+                Item storedItem = await response.Content.ReadFromJsonAsync<Item>() ?? null!;
+                if (storedItem != null)
+                {
+                    user = await localStorage.GetItemAsync<User>("user");
+                    user.Selling.RemoveAll(item => item._id == storedItem._id);
+                    user.Selling.Add(item);
+                    localStorage.SetItemAsync<User>("user", user);
+                }
+            }
+            return user;
         }
 
         public async Task<User> updateItemStatus(Item item)
@@ -86,6 +99,16 @@ namespace ThriftShopApp.Services
                 }
             }
             return user;
+        }
+
+        public async Task<List<Item>> getItems(Filter filter) { 
+            List<Item> result = new();
+            var response = await http.PostAsJsonAsync($"https://localhost:7077/api/items/queryfilter", filter);
+            if (response.IsSuccessStatusCode)
+            {
+                result = response.Content.ReadFromJsonAsync<List<Item>>().Result!;
+            }
+            return result;
         }
     }
 }
