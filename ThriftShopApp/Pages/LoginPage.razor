@@ -58,7 +58,7 @@
             user = await response.Content.ReadFromJsonAsync<User>();
             if (user != null)
             {
-                loginService.Login(user);
+                await loginService.Login(user);
                 navManager.NavigateTo(target);
             }
         }
