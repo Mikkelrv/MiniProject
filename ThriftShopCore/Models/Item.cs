@@ -18,6 +18,6 @@ namespace ThriftShopCore.Models
         public required string Status { get; set; } = "Active";
         public required string SellerEmail { get; set; }
         public DateTime? SoldTime { get; set; }
-        public string? BuyerEmail { get; set; }
+
     }
 }

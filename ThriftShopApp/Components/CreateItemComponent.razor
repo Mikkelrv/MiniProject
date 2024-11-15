@@ -1,7 +1,6 @@
 ﻿@page "/createItem"
 @inject ILoginService login
 @inject HttpClient Http
-@inject IItemHandlersService itemHandler
 
 <h3>CreateItemComponent</h3>
 <EditForm Model="@item" OnSubmit="@HandleSubmit" class="row p-3">
@@ -60,6 +59,6 @@
     private async Task HandleSubmit()
     {
         item.SellerEmail = user.Email;
-        itemHandler.createItem(item);
+        var response = await Http.PostAsJsonAsync("https://localhost:7077/api/items/add", item);
     }
 }

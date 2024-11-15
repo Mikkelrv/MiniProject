@@ -46,7 +46,7 @@ namespace ThriftShopAPI.Controllers
         {
             _repository.addItem(item);
             _userRepo.AddItemListing(item);
-            return Ok(item);
+            return Ok();
         }
 
         [HttpPost]
@@ -54,6 +54,15 @@ namespace ThriftShopAPI.Controllers
         public async Task<IEnumerable<Item>> getItemsByFilter(Filter filter)
         {
             var items = await _repository.getItems(filter.MaxPrice, filter.MinPrice, filter.Category, filter.Query, filter.Status);
+            if (items == null)
+            {
+                throw new Exception("List is null");
+            }
+            if (items.Count() == 0)
+            {
+                throw new Exception("List is empty");
+            }
+
             return items;
         }
 
@@ -62,29 +71,7 @@ namespace ThriftShopAPI.Controllers
         public IActionResult UpdateItem(string id, Item item)
         {
             _repository.updateItem(item);
-            return Ok(item);
-        }
-
-        [HttpPut]
-        [Route("update/itemstatus")]
-        public async Task<IActionResult> UpdateItemListing(Item item) {
-            Console.WriteLine("I was called");
-            await _repository.updateStatus(item);
-            await _userRepo.updateItemListing(item);
-            return Ok(item);
-        }
-
-        [HttpPut]
-        [Route("update/purchase")]
-        public async Task<IActionResult> UpdateItemPurchase(List<Item> items)
-        {
-            foreach (var item in items)
-            {
-                await _repository.updateStatus(item);
-                await _userRepo.updateItemListing(item);
-                await _userRepo.addItemPurchase(item);
-            }
-            return Ok(items);
+            return Ok();
         }
 
     }
