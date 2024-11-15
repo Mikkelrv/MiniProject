@@ -16,15 +16,10 @@
                     <i class="bi bi-plus-square me-2"></i>
                     <span>MyProfile</span>
                 </NavLink>
-                
+
                 <NavLink class="nav-item" href="listings">
                     <i class="bi bi-list-nested me-2"></i>
                     <span>Browse Listings</span>
-                </NavLink>
-                
-                <NavLink class="nav-item" href="mypurchases">
-                    <i class="bi bi-house-door me-2"></i>
-                    <span>My Purchases</span>
                 </NavLink>
             </div>
             <!-- Logout Section -->
@@ -161,40 +156,40 @@
         background-color: #c82333;
     }
 
-    
+
 </style>
 
 @code {
     private bool collapseNavMenu = true;
     private bool showLogoutDialog = false;
-    
+
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-    
+
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
-    
+
     private void ShowLogoutDialog()
     {
         showLogoutDialog = true;
     }
-    
+
     private void CancelLogout()
     {
         showLogoutDialog = false;
     }
-    
+
     private void HandleLogout()
     {
         // Reset both states
         showLogoutDialog = false;
         collapseNavMenu = true;
-        
+
         // Navigate to logout
         NavigationManager.NavigateTo("logout");
     }
-    
+
     [Inject]
     private NavigationManager NavigationManager { get; set; }
 }
