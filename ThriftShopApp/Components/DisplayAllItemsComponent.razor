@@ -1,18 +1,49 @@
-﻿<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
-	@foreach (var item in items)
-	{
-		<div class="col">
-			<DisplayItemComponent _item="@item" Basket="@Basket"/>
-		</div>
-	}
+﻿<div class="items-container">
+    @foreach (var item in items)
+    {
+        <div class="item-wrapper">
+            <DisplayItemComponent _item="@item" Basket="@Basket" />
+        </div>
+    }
 </div>
 
+<style>
+    .items-container {
+        display: flex;
+        flex-wrap: wrap; /* Allow items to wrap onto a new line */
+        gap: 10px; /* 10px gap between items */
+        justify-content: space-around; /* Ensure proper alignment */
+    }
+
+    .item-wrapper {
+        flex: 1 1 calc(25% - 10px); /* Each item takes 25% minus the gap */
+        max-width: calc(25% - 10px); /* Ensure each item takes 25% of the row */
+        min-width: 200px; /* Prevent the items from becoming too small */
+        box-sizing: border-box; /* Include padding and borders in the width calculation */
+        display: flex;
+        justify-content: center; /* Center the item */
+    }
+
+        .item-wrapper .card {
+            width: 100%; /* Ensure the card takes up the full width of the item wrapper */
+            height: auto; /* Let the card height adjust automatically */
+        }
+
+        .item-wrapper .card-img-top {
+            width: 100%; /* Ensure the image fits inside the card */
+            height: auto; /* Let the image maintain its aspect ratio */
+        }
+
+        .item-wrapper .card-body {
+            padding: 10px; /* Adjust padding to prevent overflow */
+            box-sizing: border-box; /* Ensure padding is included within the item width */
+        }
+</style>
+
 @code {
-	[Parameter]
-	public List<Item> items { get; set; }
+    [Parameter]
+    public List<Item> items { get; set; }
 
-	[Parameter]
-	public List<Item> Basket { get; set; }
-
+    [Parameter]
+    public List<Item> Basket { get; set; }
 }
-

@@ -1,12 +1,12 @@
-﻿@using ThriftShopCore.Models
-@inject IJSRuntime JS // Optional, to control scroll locking when modal is open
+@using ThriftShopCore.Models
+@inject IJSRuntime JS
+<link href="~/css/DisplayItemComponent.css" rel="stylesheet" />
 @inject IItemHandlersService itemHandler
 
-<div class="card shadow-lg" style="width: 18rem;" @onclick="ShowDetail">
-    <!-- Image at the top -->
-    <img src="@_item.ImageUrl" class="card-img-top" alt="@_item.Name">
 
-    <!-- Card body with Name, Price, and Category -->
+
+<div class="card shadow-lg bg-dark text-light m-2" style="width: 18rem;" @onclick="ShowDetail">
+    <img src="@_item.ImageUrl" class="card-img-top img-thumbnail" alt="@_item.Name" style="width: 100%; height: 200px; object-fit: cover;">
     <div class="card-body">
         <h5 class="card-title mb-1">@_item.Name</h5>
         <p class="card-text mb-1 text-muted">$@_item.Price.ToString("F2")</p>
@@ -15,25 +15,37 @@
 
 @if (showModal)
 {
-    <!-- Modal overlay -->
     <div class="modal-overlay" @onclick="CloseDetail">
-        <!-- Detailed item modal -->
-        <div class="item-detail-modal card shadow" @onclick:stopPropagation="true">
-            <img src="@_item.ImageUrl" class="card-img-top" alt="@_item.Name" />
+        <div class="item-detail-modal card shadow bg-dark text-light" @onclick:stopPropagation="true">
+            <img src="@_item.ImageUrl" class="card-img-top img-thumbnail" alt="@_item.Name"
+                 style="width: 100%; height: 200px; object-fit: cover;" @onclick="ShowFullImage">
 
             <div class="card-body">
-                <button type="button" class="btn-close float-end" aria-label="Close" @onclick="CloseDetail"></button>
+                <button type="button" class="btn-close btn-close-white float-end" aria-label="Close" @onclick="CloseDetail"></button>
                 <h5 class="card-title">@_item.Name</h5>
                 <h6 class="card-subtitle mb-2 text-muted">@_item.Category</h6>
 
                 <p class="card-text"><strong>Price:</strong> $@_item.Price.ToString("F2")</p>
-                <p class="card-text"><strong>Description:</strong> @_item.Description</p>
+                <p class="card-text">
+                    <strong>Description:</strong> @shortDescription
+                    @if (_item.Description.Length > 100)
+                    {
+                        <a href="javascript:void(0);" @onclick="ToggleReadMore">@readMoreText</a>
+                    }
+                </p>
                 <p class="card-text"><strong>Status:</strong> <span class="badge bg-success">@_item.Status</span></p>
                 <p class="card-text"><strong>Seller:</strong> <a href="mailto:@_item.SellerEmail">@_item.SellerEmail</a></p>
                 <p class="card-text"><strong>Listed On:</strong> @_item.Listed.ToString("MMMM dd, yyyy")</p>
                 <button class="btn btn-primary" @onclick="()=>addToBasket(_item)">Add to basket</button>
             </div>
         </div>
+    </div>
+}
+
+@if (showFullImage)
+{
+    <div class="modal-overlay" @onclick="CloseFullImage">
+        <img src="@_item.ImageUrl" alt="@_item.Name" class="full-image-modal" @onclick:stopPropagation="true" />
     </div>
 }
 
@@ -44,7 +56,7 @@
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        background: rgba(0, 0, 0, 0.5);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -55,20 +67,23 @@
         position: relative;
         max-width: 500px;
         width: 90%;
-        background: #fff;
+        max-height: 80vh;
+        overflow-y: auto;
+        background: #333;
         border-radius: 8px;
         padding: 20px;
         z-index: 1001;
     }
 
-    .btn-close {
-        position: absolute;
-        top: 10px;
-        right: 10px;
+    .full-image-modal {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 8px;
+        z-index: 1002;
     }
 
     body.modal-open {
-        overflow: hidden; /* Prevent scrolling when modal is open */
+        overflow: hidden;
     }
 </style>
 
@@ -80,27 +95,49 @@
     public List<Item> Basket { get; set; }
 
     private bool showModal = false;
-
-
+    private bool showFullImage = false;
+    private bool showMore = false;
+    private string readMoreText => showMore ? "Show Less" : "Read More";
+    private string shortDescription => showMore || _item.Description.Length <= 100
+        ? _item.Description
+        : _item.Description.Substring(0, 100) + "...";
 
     private void ShowDetail()
     {
         showModal = true;
-        JS.InvokeVoidAsync("document.body.classList.add", "modal-open"); // Optional: disable body scroll when modal opens
+        JS.InvokeVoidAsync("document.body.classList.add", "modal-open");
     }
 
     private void CloseDetail()
     {
         showModal = false;
-        JS.InvokeVoidAsync("document.body.classList.remove", "modal-open"); // Optional: re-enable body scroll when modal closes
-        StateHasChanged();
+        JS.InvokeVoidAsync("document.body.classList.remove", "modal-open");
+    }
+
+    private void ToggleReadMore()
+    {
+        showMore = !showMore;
+    }
+
+    private void ShowFullImage()
+    {
+        showFullImage = true;
+    }
+
+    private void CloseFullImage()
+    {
+        showFullImage = false;
     }
 
     public async Task addToBasket(Item item)
     {
-        Basket.Add(item);
-        item.Status = "Reserved";
-        User user = await itemHandler.updateItemStatus(item);
-        showModal = false;
+        if (!Basket.Contains(item))
+        {
+            Basket.Add(item);
+            item.Status = "Reserved";
+            User user = await itemHandler.updateItemStatus(item);
+            showModal = false;
+        }
+
     }
 }

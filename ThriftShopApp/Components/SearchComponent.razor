@@ -1,58 +1,89 @@
 ﻿@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject HttpClient Http
 
-<div class="container mt-4">
-    <div class="input-group mb-3">
-        <button type="button" class="btn btn-primary" @onclick="@triggerSearch">Search</button>
-        <input type="text" class="form-control col-4" @bind="_filter.Query" placeholder="Search query" />
+<div class="container-fluid">
+    <div class="row">
+        <!-- Main Content Area (adjusted for sidebar) -->
+        <div class="col-12">
+            <div class="card p-2">
+                <h5 class="card-title mb-3">Search Items</h5>
 
-        <select class="form-select col-3" @bind="_filter.Category">
-            <option value="">Select Category</option>
-            @foreach (var category in _categories.CategoriesList)
-            {
-                <option value="@category">@category</option>
-            }
-        </select>
-        @if (showStatusOptions)
-        {
-            <select class="form-select col-3" @bind="_filter.Status">
-                <option value="">Select Status</option>
-                @foreach (var status in _status.StatusList)
+                <!-- Search Query (Row 1) -->
+                <div class="row g-2 mb-2">
+                    <div class="col-12">
+                        <input type="text" class="form-control form-control-sm" @bind="_filter.Query" placeholder="Search query" />
+                    </div>
+                </div>
+
+                <!-- Filter Options (Category, Min/Max Price) (Row 2) -->
+                <div class="row g-2 mb-2">
+                    <!-- Category Dropdown with Label -->
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <label for="category" class="form-label fs-6 mb-1">Category</label>
+                        <select id="category" class="form-select form-select-sm" @bind="_filter.Category">
+                            <option value="">Select Category</option>
+                            @foreach (var category in _categories.CategoriesList)
+                            {
+                                <option value="@category">@category</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Min Price Input with Label -->
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <label for="minPrice" class="form-label fs-6 mb-1">Min Price</label>
+                        <input type="number" id="minPrice" class="form-control form-control-sm" @bind="_filter.MinPrice" placeholder="Min Price" />
+                    </div>
+
+                    <!-- Max Price Input with Label -->
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <label for="maxPrice" class="form-label fs-6 mb-1">Max Price</label>
+                        <input type="number" id="maxPrice" class="form-control form-control-sm" @bind="_filter.MaxPrice" placeholder="Max Price" />
+                    </div>
+                </div>
+
+                <!-- Status Dropdown (Optional) (Row 3) -->
+                @if (showStatusOptions)
                 {
-                    <option value="@status">@status</option>
+                    <div class="row g-2 mb-2">
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <label for="status" class="form-label fs-6 mb-1">Status</label>
+                            <select id="status" class="form-select form-select-sm" @bind="_filter.Status">
+                                <option value="">Select Status</option>
+                                @foreach (var status in _status.StatusList)
+                                {
+                                    <option value="@status">@status</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
                 }
-            </select>
-        }
 
-        <span class="input-group-text col-1">Min Price</span>
-        <input type="number" class="form-control col-1" @bind="_filter.MinPrice" placeholder="Minimum price" />
-        <span class="input-group-text col-1">Max Price</span>
-        <input type="number" class="form-control col-1" @bind="_filter.MaxPrice" placeholder="Max price" />
+                <!-- Search Button (Centered) -->
+                <div class="d-flex justify-content-center mt-3">
+                    <button type="button" class="btn btn-primary w-50 btn-sm" @onclick="triggerSearch">Search</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-
-
 @code {
-
     [Parameter]
     public Filter _filter { get; set; }
 
     [Parameter]
     public bool showStatusOptions { get; set; }
 
-    //Event to notify parent component of updated items
     [Parameter]
     public EventCallback<Filter> SearchRequested { get; set; }
-
 
     private Categories _categories = new();
     private Status _status = new();
 
-    //notify parent component that items have been updated
+    // Notify parent component that the search filter has been updated
     public async Task triggerSearch()
     {
-
         var newFilter = new Filter
             {
                 Query = _filter.Query,
