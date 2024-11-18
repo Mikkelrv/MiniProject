@@ -81,7 +81,7 @@ namespace ThriftShopAPI.Controllers
         {
             foreach (var item in items)
             {
-                await _repository.updateStatus(item);
+                await _repository.updateItem(item);
                 await _userRepo.updateItemListing(item);
                 await _userRepo.addItemPurchase(item);
             }

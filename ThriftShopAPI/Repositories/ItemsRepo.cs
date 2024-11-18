@@ -72,10 +72,10 @@ namespace ThriftShopAPI.Repositories
             return items;
         }
 
-        public void updateItem(Item item)
+        public async Task updateItem(Item item)
         {
             var filter = Builders<Item>.Filter.Eq(i => i._id, item._id);
-            _collection.ReplaceOne(filter, item);
+           await _collection.ReplaceOneAsync(filter, item);
         }
 
         public async Task updateStatus(Item item) {

@@ -55,7 +55,6 @@ namespace ThriftShopApp.Services
             if (response.IsSuccessStatusCode)
             {
                 List<Item> storedItems = await response.Content.ReadFromJsonAsync<List<Item>>() ?? null!;
-                Console.WriteLine(storedItems[1].Name);
                 if (storedItems != null)
                 {
                     user = await localStorage.GetItemAsync<User>("user");

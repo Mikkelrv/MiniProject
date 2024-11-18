@@ -1,4 +1,4 @@
-﻿@page "/listings/{target:alpha}"
+﻿@page "/listings"
 @inject HttpClient Http
 @inject NavigationManager navManager
 @inject ILoginService loginService
@@ -50,7 +50,10 @@
 @code {
     private User? _user;
     private List<Item> _items = new();
-    private Filter _filter = new();
+    private Filter _filter = new Filter
+        {
+            Status = "Active"
+        };
     private List<Item> _basket = new();
     public string target { get; set; } 
 
