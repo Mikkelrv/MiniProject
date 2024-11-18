@@ -3,6 +3,7 @@
 @inject NavigationManager navManager
 @inject ILoginService loginService
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject IItemHandlersService itemHandler
 
 <style>
     .basket-container {
@@ -19,7 +20,7 @@
 </style>
 
 <div class="basket-container">
-    <BasketComponent Basket="@_basket" />
+    <BasketComponent Basket="@_basket" user="@_user" />
 </div>
 
 <div class="container mt-4">
@@ -49,8 +50,12 @@
 @code {
     private User? _user;
     private List<Item> _items = new();
-    private Filter _filter = new();
+    private Filter _filter = new Filter
+        {
+            Status = "Active"
+        };
     private List<Item> _basket = new();
+    public string target { get; set; } 
 
     protected override async Task OnInitializedAsync()
     {
@@ -65,11 +70,7 @@
 
     private async Task FetchItems()
     {
-        var response = await Http.PostAsJsonAsync($"https://localhost:7077/api/items/queryfilter", _filter);
-        if (response.IsSuccessStatusCode)
-        {
-            _items = await response.Content.ReadFromJsonAsync<List<Item>>();
-        }
+        _items = await itemHandler.getItems(_filter);
     }
 
     private async Task OnSearchRequested(Filter filter)

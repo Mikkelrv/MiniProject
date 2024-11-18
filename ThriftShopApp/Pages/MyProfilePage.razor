@@ -39,7 +39,7 @@ else
                             <tr>
                                 <td>@item.Name</td>
                                 <td>@item.Description</td>
-                                <td>DKK @item.Price</td>
+                                <td>$@item.Price</td>
                                 <td>@item.Category</td>
                                 @if (item.SoldTime != null){
                                     <td>@item.SoldTime</td>
@@ -54,7 +54,7 @@ else
             </div>
         }
 
-        <h5>Sales</h5>
+        <h5>Selling</h5>
         <button class="btn btn-primary mb-3" @onclick="() => toggleSalesView()">Toggle View</button>
 
         @if (showSalesSimple)
@@ -81,7 +81,7 @@ else
                             <tr>
                                 <td>@item.Name</td>
                                 <td>@item.Description</td>
-                                <td>DKK @item.Price</td>
+                                <td>$@item.Price</td>
                                 <td>@item.Category</td>
                                 @if (item.SoldTime != null){
                                     <td>@item.SoldTime</td>
@@ -97,6 +97,7 @@ else
         }
     </div>
     
+    <CreateItemComponent/>    
     <style>
         /* Card Styling for Fixed Size */
         .fixed-card-img {

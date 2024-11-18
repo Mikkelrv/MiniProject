@@ -2,7 +2,7 @@
     @foreach (var item in items)
     {
         <div class="item-wrapper">
-            <DisplayItemComponent _item="@item" Basket="@Basket" User="@User" isToggleShownButton="isToggleShownButton"/>
+            <DisplayItemComponent _item="@item" Basket="@Basket" User="@User" isToggleShownButton="isToggleShownButton" isShowEditComponent="@(User!=null ? User.Email==item.SellerEmail : false)" />
         </div>
     }
 </div>

@@ -1,53 +1,135 @@
-﻿@page "/createItem"
-@inject ILoginService login
+﻿@inject ILoginService login
 @inject HttpClient Http
 @inject IItemHandlersService itemHandler
+@inject IJSRuntime JS
+@inject IImgurService ImgurService
 
-<h3>@(item._id==null?"Create" : "Update") a listing for an item</h3>
-<EditForm Model="@item" OnSubmit="@HandleSubmit" class="row p-3">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div class="form-group">
-        <label for="name">Name</label>
-        <InputText id="name" class="form-control" @bind-Value="item.Name" placeholder="Name of item" />
+<div class="create-item-button" @onclick="ShowModal">
+    <span class="plus-icon">+</span>
+</div>
+
+@if (showModal)
+{
+    <div class="modal-overlay" @onclick="CloseModal">
+        <div class="item-detail-modal card shadow bg-dark text-light" @onclick:stopPropagation="true">
+            <div class="card-body">
+                <button type="button" class="btn-close btn-close-white float-end" aria-label="Close" @onclick="CloseModal"></button>
+                <h3>@(item._id == null ? "Create" : "Update") a listing for an item</h3>
+                <div class="form-group mb-3">
+                    <label for="imgURL">Image URL</label>
+                    <ImgurUploadComponent @bind-Value="item.ImageUrl" />
+                </div>
+                <EditForm Model="@item" OnSubmit="@HandleSubmit" class="row p-3">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="form-group mb-3">
+                        <label for="name">Name</label>
+                        <InputText id="name" class="form-control" @bind-Value="item.Name" placeholder="Name of item" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="price">Price</label>
+                        <InputNumber id="Price" class="form-control" @bind-Value="item.Price" placeholder="Price" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="category">Category</label>
+                        <InputSelect id="category" class="form-control" @bind-Value="item.Category" placeholder="Category">
+                            @foreach (string category in categories.CategoriesList)
+                            {
+                                <option value=@category>@category</option>
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="Description">Description</label>
+                        <InputText id="description" class="form-control" @bind-Value="item.Description" placeholder="Description" />
+                    </div>
+
+                   
+
+                    <div class="col-12 mb-3">
+                        <button type="submit" class="btn btn-primary">@(item._id == null ? "Submit" : "Update")</button>
+                    </div>
+                </EditForm>
+               
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="price">Price</label>
-        <InputNumber id="Price" class="form-control" @bind-Value="item.Price" placeholder="Price" />
-    </div>
-    <div>
-        <label for="category">Category</label>
-        <InputSelect id="Price" class="form-control" @bind-Value="item.Category" placeholder="Category">
-            @foreach (string category in categories.CategoriesList)
-            {
-                <option value=@category>@category</option>
-            }
-        </InputSelect>
-    </div>
-    <div>
-        <label for="Description">Description</label>
-        <InputText id="description" class="form-control" @bind-Value="item.Description" placeholder="Description" />
-    </div>
-    <div>
-        <label for="imgURL">Image URL</label>
-        <InputText id="img" class="form-control" @bind-Value="item.ImageUrl" placeholder="ImageURL" />
-    </div>
-    <div class="col-12 mb-3">
-        <button type="submit" class="btn btn-primary">@(item._id == null ? "Submit" : "Update")</button>
-    </div>
-</EditForm>
+}
+
+<style>
+    .create-item-button {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 4rem;
+        height: 4rem;
+        background-color: #0d6efd;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+        z-index: 999;
+    }
+
+        .create-item-button:hover {
+            transform: scale(1.1);
+        }
+
+    .plus-icon {
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .item-detail-modal {
+        position: relative;
+        max-width: 600px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: #333;
+        border-radius: 8px;
+        padding: 20px;
+        z-index: 1001;
+    }
+
+    body.modal-open {
+        overflow: hidden;
+    }
+</style>
 
 @code {
+    private bool showModal = false;
     public User? user { get; set; }
     public Categories categories = new();
-    [Parameter]
+
     public Item item { get; set; } = new()
-    {
+        {
             Name = "name",
             Price = 10,
             Description = "write description",
             Category = "Miscellaneous",
-            ImageUrl = "https://images.dog.ceo/breeds/cockapoo/george-tongue.jpg",
+            ImageUrl = "",
             SellerEmail = "",
             Listed = DateTime.Now,
             Status = "Active"
@@ -56,6 +138,18 @@
     protected override async Task OnInitializedAsync()
     {
         user = await login.GetUserLoggedIn();
+    }
+
+    private void ShowModal()
+    {
+        showModal = true;
+        JS.InvokeVoidAsync("document.body.classList.add", "modal-open");
+    }
+
+    private void CloseModal()
+    {
+        showModal = false;
+        JS.InvokeVoidAsync("document.body.classList.remove", "modal-open");
     }
 
     private async Task HandleSubmit()
@@ -69,5 +163,6 @@
         {
             user = await itemHandler.updateItem(item);
         }
+        CloseModal();
     }
 }

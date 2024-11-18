@@ -1,4 +1,6 @@
-﻿<div class="position-relative">
+﻿@inject IItemHandlersService itemHandler
+
+<div class="position-relative">
     <div class="btn btn-primary dropdown-toggle" @onclick="ToggleBasket" aria-expanded="@_showBasket">
         Basket
     </div>
@@ -16,7 +18,7 @@
                         <hr/>
                     </div>
                 }
-                <button class="btn btn-primary w-100">Buy items</button>
+                <button class="btn btn-primary w-100" @onclick="buyItems">Buy items</button>
             }
             else
             {
@@ -31,10 +33,24 @@
     [Parameter]
     public List<Item> Basket { get; set; } = new();
 
+    [Parameter]
+    public User? user { get; set; } 
+
     private bool _showBasket = false;
 
     private void ToggleBasket()
     {
         _showBasket = !_showBasket;
+    }
+
+    public async Task buyItems()
+    {
+        foreach (Item item in Basket)
+        {
+            item.BuyerEmail = user.Email;
+            item.SoldTime = DateTime.Now;
+            item.Status = "Sold";
+        }
+        user = await itemHandler.purchaseItems(Basket);
     }
 }

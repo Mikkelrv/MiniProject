@@ -11,12 +11,12 @@
         Upload
     </button>
 
-    @if (!string.IsNullOrEmpty(_imgurUrl))
+    @if (!string.IsNullOrEmpty(Value))
     {
         <div class="mt-3 text-center">
-            <img src="@_imgurUrl" alt="Uploaded Image" class="img-fluid rounded" style="max-height: 150px;" />
+            <img src="@Value" alt="Uploaded Image" class="img-fluid rounded" style="max-height: 150px;" />
             <p class="mt-2 mb-0 small">
-                <a href="@_imgurUrl" target="_blank" class="text-info">View Image</a>
+                <a href="@Value" target="_blank" class="text-info">View Image</a>
             </p>
         </div>
     }
@@ -24,8 +24,13 @@
 
 @code {
     private bool _fileSelected = false;
-    private string? _imgurUrl;
     private IBrowserFile? _selectedFile;
+
+    [Parameter]
+    public string Value { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
 
     private void OnFileSelected(InputFileChangeEventArgs e)
     {
@@ -43,8 +48,9 @@
                 using var ms = new MemoryStream();
                 await stream.CopyToAsync(ms);
                 var imageData = ms.ToArray();
-                _imgurUrl = await ImgurService.UploadImageAsync(imageData);
-                StateHasChanged();
+                var uploadedUrl = await ImgurService.UploadImageAsync(imageData);
+                Value = uploadedUrl;
+                await ValueChanged.InvokeAsync(uploadedUrl);
             }
             catch (HttpRequestException ex)
             {

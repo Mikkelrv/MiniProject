@@ -7,7 +7,7 @@ namespace ThriftShopApp.Services
         public Task<User> createItem(Item item);
         public Task<User> updateItem(Item item);
         public Task<User> updateItemStatus(Item item);
-        public Task<User> purchaseItem(List<Item> items);
+        public Task<User> purchaseItems(List<Item> items);
         public Task<User> deleteItem(Item item);
         public Task<List<Item>> getItems(Filter filter);
     }

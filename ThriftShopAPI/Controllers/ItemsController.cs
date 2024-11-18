@@ -57,11 +57,12 @@ namespace ThriftShopAPI.Controllers
             return items;
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("update")]
-        public IActionResult UpdateItem(string id, Item item)
+        public IActionResult UpdateItem(Item item)
         {
             _repository.updateItem(item);
+            _userRepo.updateItemListing(item);
             return Ok(item);
         }
 
@@ -74,13 +75,13 @@ namespace ThriftShopAPI.Controllers
             return Ok(item);
         }
 
-        [HttpPut]
-        [Route("update/purchase")]
+        [HttpPost]
+        [Route("purchase")]
         public async Task<IActionResult> UpdateItemPurchase(List<Item> items)
         {
             foreach (var item in items)
             {
-                await _repository.updateStatus(item);
+                await _repository.updateItem(item);
                 await _userRepo.updateItemListing(item);
                 await _userRepo.addItemPurchase(item);
             }
