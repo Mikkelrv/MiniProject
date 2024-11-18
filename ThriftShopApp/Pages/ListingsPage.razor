@@ -1,4 +1,4 @@
-﻿@page "/listings"
+﻿@page "/listings/{target:alpha}"
 @inject HttpClient Http
 @inject NavigationManager navManager
 @inject ILoginService loginService
@@ -52,6 +52,7 @@
     private List<Item> _items = new();
     private Filter _filter = new();
     private List<Item> _basket = new();
+    public string target { get; set; } 
 
     protected override async Task OnInitializedAsync()
     {

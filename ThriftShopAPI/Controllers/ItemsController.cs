@@ -75,8 +75,8 @@ namespace ThriftShopAPI.Controllers
             return Ok(item);
         }
 
-        [HttpPut]
-        [Route("update/purchase")]
+        [HttpPost]
+        [Route("purchase")]
         public async Task<IActionResult> UpdateItemPurchase(List<Item> items)
         {
             foreach (var item in items)

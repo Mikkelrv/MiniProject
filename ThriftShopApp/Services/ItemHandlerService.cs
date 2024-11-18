@@ -50,7 +50,7 @@ namespace ThriftShopApp.Services
 
         public async Task<User> purchaseItems(List<Item> items)
         {
-            var response = await http.PutAsJsonAsync("https://localhost:7077/api/items/update/purchase", items);
+            var response = await http.PostAsJsonAsync("https://localhost:7077/api/items/purchase", items);
             User? user = null;
             if (response.IsSuccessStatusCode)
             {
