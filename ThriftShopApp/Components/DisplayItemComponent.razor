@@ -44,7 +44,7 @@
 				else
 				{
 					<button class="btn btn-primary" @onclick="toggleEditComponent">Edit</button>
-					if (_isShowEditComponent)
+					if (isShowEditComponent)
 					{
 						<CreateItemComponent item="@_item" />
 					}
@@ -112,7 +112,8 @@
 	[Parameter]
 	public bool isToggleShownButton { get; set; } = false;
 
-	private bool _isShowEditComponent = false;
+	[Parameter]
+	public bool isShowEditComponent { get; set; } = false;
 
 	private bool showModal = false;
 	private bool showFullImage = false;
@@ -155,7 +156,11 @@
 		{
 			Basket.Add(item);
 			item.Status = "Reserved";
-			User user = await itemHandler.updateItemStatus(item);
+			User user = await itemHandler.updateItem(item);
+			if (user == null)
+			{
+				throw new Exception("update item is not working");	
+			}
 			showModal = false;
 		}
 		CloseDetail();
@@ -163,6 +168,6 @@
 
 	public void toggleEditComponent()
 	{
-		_isShowEditComponent = true;
+		isShowEditComponent = true;
 	}
 }

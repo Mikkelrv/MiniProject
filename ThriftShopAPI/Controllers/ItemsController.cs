@@ -57,11 +57,12 @@ namespace ThriftShopAPI.Controllers
             return items;
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("update")]
-        public IActionResult UpdateItem(string id, Item item)
+        public IActionResult UpdateItem(Item item)
         {
             _repository.updateItem(item);
+            _userRepo.updateItemListing(item);
             return Ok(item);
         }
 

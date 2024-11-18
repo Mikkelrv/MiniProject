@@ -48,13 +48,14 @@ namespace ThriftShopApp.Services
             return user;
         }
 
-        public async Task<User> purchaseItem(List<Item> items)
+        public async Task<User> purchaseItems(List<Item> items)
         {
             var response = await http.PutAsJsonAsync("https://localhost:7077/api/items/update/purchase", items);
             User? user = null;
             if (response.IsSuccessStatusCode)
             {
                 List<Item> storedItems = await response.Content.ReadFromJsonAsync<List<Item>>() ?? null!;
+                Console.WriteLine(storedItems[1].Name);
                 if (storedItems != null)
                 {
                     user = await localStorage.GetItemAsync<User>("user");
@@ -67,14 +68,13 @@ namespace ThriftShopApp.Services
 
         public async Task<User> updateItem(Item item)
         {
-            var response = await http.PutAsJsonAsync("https://localhost:7077/api/items/update", item);
-            User? user = null;
+            var response = await http.PostAsJsonAsync("https://localhost:7077/api/items/update", item);
+            User? user = await localStorage.GetItemAsync<User>("user");
             if (response.IsSuccessStatusCode)
             {
                 Item storedItem = await response.Content.ReadFromJsonAsync<Item>() ?? null!;
-                if (storedItem != null)
+                if (storedItem != null && item.SellerEmail == user.Email)
                 {
-                    user = await localStorage.GetItemAsync<User>("user");
                     user.Selling.RemoveAll(item => item._id == storedItem._id);
                     user.Selling.Add(item);
                     localStorage.SetItemAsync<User>("user", user);

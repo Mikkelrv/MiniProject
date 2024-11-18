@@ -75,7 +75,7 @@ namespace ThriftShopAPI.Repositories
         public async Task addItemPurchase(Item item)
         {
             var userFilter = Builders<User>.Filter.Eq("Email", item.BuyerEmail);
-            var updatePush = Builders<User>.Update.Push("Purchsed", item);
+            var updatePush = Builders<User>.Update.Push("Purchases", item);
 
             await _collection.UpdateOneAsync(userFilter, updatePush);
         }
